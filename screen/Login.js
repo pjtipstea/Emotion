@@ -1,5 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
-import ExpoStatusBar from 'expo-status-bar/build/ExpoStatusBar';
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
 
