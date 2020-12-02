@@ -6,6 +6,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import Login from './screen/Login';
 import Main from './screen/Main';
+import BottomTabNavigator from './screen/Menu/BottomTabNavigator';
 
 const Stack = createStackNavigator();
 
@@ -17,8 +18,9 @@ export default function App() {
         headerShown: false,
       }}
       >
-        <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Main" component={Main} />
+        <Stack.Screen name="Menu" component={BottomTabNavigator} />
+        <Stack.Screen name="Login" component={Login} />
       </Stack.Navigator>
     </NavigationContainer>
   );
