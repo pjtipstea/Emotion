@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, TextInput, ImageBackground } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default class Main extends Component {
@@ -8,15 +8,17 @@ export default class Main extends Component {
     super(props);
 
     this.state = {
-      name: "",
-      gender: "",
-      age: "",
-      count: 0,
+      num: 0,
       load: false,
-      step: 1,
+      count: 0,      
+      step: 0,
       progress: [
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       ],
+      user: [],
+      name: "",
+      gender: "",
+      age: "",
       V: 0,
       A: 0,
       D: 0,
@@ -35,6 +37,7 @@ export default class Main extends Component {
         '', '',
         '', '',
       ],
+      totalList: [],
       emotion: [
         { word: "Great", V: 0.949, A: 0.243, D: 0.423, frequency: 0, simple: [], average: 0, combine: 0, result: 0 },
         { word: "Good", V: 0.438, A: -0.132, D: 0.034, frequency: 0, simple: [], average: 0, combine: 0, result: 0 },
@@ -664,12 +667,14 @@ export default class Main extends Component {
         { word: "혻I still enjoy the things I used to do.", V: 0.898, A: 0.465, D: 0.432, question: "SDS", priority: 5, frequency: 0, simple: [], average: 0, combine: 0, result: 0, initial: 0 }
       ],
       activity: '',
-      describe: '',
+      content: '',
     }
+
+    this.getNumFromServer();
   }
 
-  getDataFromServer() {
-    const url = 'http://samuel1226.dothome.co.kr/emotionsurvey/getData.php'
+  getNumFromServer() {
+    const url = 'http://samuel1226.dothome.co.kr/scribble/getNum.php'
 
     fetch(url, {
 
@@ -683,7 +688,7 @@ export default class Main extends Component {
       .then((response) => response.json())
       .then((responseInJson) => {
         console.log(responseInJson);
-        this.setState({ count: responseInJson.count });
+        this.setState({ num: responseInJson.num });
         this.setState({ load: true });
       })
       .catch((e) => console.log(e))
@@ -692,26 +697,20 @@ export default class Main extends Component {
   }
 
   sendDataToServer() {
-    const url = 'http://samuel1226.dothome.co.kr/emotionsurvey/addData.php'
+    const url = 'http://samuel1226.dothome.co.kr/scribble/addData.php'
 
     let data = {
-      data: [
-        {
-          step: 1,
-          tree: "1",
-          node: "2",
-          value: 100,
-          name: "yoon"
-        },
-        {
-          step: 1,
-          tree: "2",
-          node: "3",
-          value: 80,
-          name: "yoon Ha"
-        }
-      ]
+      num: this.state.num,
+      name: this.state.name,
+      gender: this.state.gender,
+      age: this.state.age,
+      selected: this.state.selected,
+      totalList: this.state.totalList,
+      activity: this.state.activity,
+      content: this.state.content,
     }
+
+    console.log(data);
 
     try {
       fetch(url, {
@@ -731,20 +730,22 @@ export default class Main extends Component {
     }
   }
 
-  createList(i, tmpCount, flag) {
+  createList(i, sequence) {
     console.log("\n");
 
-    console.log("i : " + i + " tmpCount : " + tmpCount);
+    this.increaseProgress()
 
-    var count = tmpCount + 1;
+    var count = this.state.count + 1;
+    var step = this.state.step + 1;
+    this.setState({ count : count });
+    this.setState({ step: step });
 
-    var index, indexFrequency;
+    var index;
 
     if (count <= 8) {
       // Finding selected emotion information
       index = this.state.emotion.find((element) => {
         if (element.word == i) {
-          indexFrequency = element.frequency;
           element.frequency = -1;
           return element;
         }
@@ -753,7 +754,6 @@ export default class Main extends Component {
       // Finding selected state information
       index = this.state.state.find((element) => {
         if (element.word == i) {
-          indexFrequency = element.frequency;
           element.frequency = -1;
           return element;
         }
@@ -765,7 +765,8 @@ export default class Main extends Component {
       V: index.V,
       A: index.A,
       D: index.D,
-      frequency: indexFrequency,
+      sequence: sequence,
+      similarity: index.result,
     };
 
     var V;
@@ -773,51 +774,15 @@ export default class Main extends Component {
     var D;
 
     // Push word to selected array
-    if (flag) {
-      this.state.selected.push(selectedInfo);
+    this.state.selected.push(selectedInfo);
 
-      // Calculate standard matrix
-      V = (this.state.V * (count - 4) + index.V) / (count - 3);
-      A = (this.state.A * (count - 4) + index.A) / (count - 3);
-      D = (this.state.D * (count - 4) + index.D) / (count - 3);
-
-    } else {
-      var tmpSelected = this.state.selected;
-      var deleteWord = tmpSelected.pop();
-      if (count <= 8) {
-        // Finding selected emotion information
-        index = this.state.emotion.find((element) => {
-          if (element.word == deleteWord.word) {
-            element.frequency = deleteWord.frequency;
-            return element;
-          }
-        })
-      } else {
-        // Finding selected state information
-        index = this.state.state.find((element) => {
-          if (element.word == deleteWord.word) {
-            element.frequency = deleteWord.frequency;
-            return element;
-          }
-        })
-      }
-
-      var tmpV = 0, tmpA = 0, tmpD = 0;
-
-      for (var i = 0; i < count - 3; i++) {
-        tmpV += this.state.selected[i].V;
-        tmpA += this.state.selected[i].A;
-        tmpD += this.state.selected[i].D;
-      }
-      V = tmpV / (count - 3);
-      A = tmpA / (count - 3);
-      D = tmpD / (count - 3);
-    }
+    // Calculate standard matrix
+    V = (this.state.V * (count - 4) + index.V) / (count - 3);
+    A = (this.state.A * (count - 4) + index.A) / (count - 3);
+    D = (this.state.D * (count - 4) + index.D) / (count - 3);
 
     // Initial matrix
     this.setState({ V: V, A: A, D: D });
-
-    console.log("V : " + V + " A : " + A + " D : " + D);
 
     let tmp;
 
@@ -910,10 +875,12 @@ export default class Main extends Component {
 
         check.push(duplicate);
 
-        tmpList.push(tmp[i].word);
-        if (flag) {
-          tmp[i].frequency++;
-        }
+        var set = [];
+        set.push(tmp[i].word);
+        set.push(tmp[i].result);
+
+        tmpList.push(set);
+        tmp[i].frequency++;
       }
 
       for (var i = 0; i < 18; i++) {
@@ -927,6 +894,8 @@ export default class Main extends Component {
       // Set arrays to state
       this.setState({ emotion: tmp });
       this.setState({ wordSpace: tmpList });
+
+      this.state.totalList.push(tmpList);
     } else {
       // Making 10 size word list
       for (var i = 0; i < 10; i++) {
@@ -948,11 +917,12 @@ export default class Main extends Component {
         }
 
         check.push(duplicate);
+        var set = [];
+        set.push(tmp[i].word);
+        set.push(tmp[i].result);
 
-        tmpList.push(tmp[i].word);
-        if (flag) {
-          tmp[i].frequency++;
-        }
+        tmpList.push(set);
+        tmp[i].frequency++;
       }
 
       for (var i = 0; i < 10; i++) {
@@ -966,6 +936,8 @@ export default class Main extends Component {
       // Set arrays to state
       this.setState({ state: tmp });
       this.setState({ stateSpace: tmpList });
+
+      this.state.totalList.push(tmpList);
     }
 
   }
@@ -1024,71 +996,71 @@ export default class Main extends Component {
     switch(this.state.activity) {
       case 'exercise':
         return (
-          <Image
-            style={styles.face}
+          <ImageBackground
+            style={styles.exerciseImage}
             source={require('../assets/activities/exercise.png')}
           />
         )
       case 'family':
         return (
-          <Image
-            style={styles.face}
+          <ImageBackground
+            style={styles.exerciseImage}
             source={require('../assets/activities/family.png')}
           />
         )
       case 'finances':
         return (
-          <Image
-            style={styles.face}
+          <ImageBackground
+            style={styles.exerciseImage}
             source={require('../assets/activities/finances.png')}
           />
         )
       case 'friends':
         return (
-          <Image
-            style={styles.face}
+          <ImageBackground
+            style={styles.exerciseImage}
             source={require('../assets/activities/friends.png')}
           />
         )
       case 'health':
         return (
-          <Image
-            style={styles.face}
+          <ImageBackground
+            style={styles.exerciseImage}
             source={require('../assets/activities/health.png')}
           />
         )
       case 'hobbies':
         return (
-          <Image
-            style={styles.face}
+          <ImageBackground
+            style={styles.exerciseImage}
             source={require('../assets/activities/hobbies.png')}
           />
         )
       case 'location':
         return (
-          <Image
-            style={styles.face}
+          <ImageBackground
+            style={styles.exerciseImage}
             source={require('../assets/activities/location.png')}
           />
         )
       case 'relationships':
         return (
-          <Image
-            style={styles.face}
+          <ImageBackground
+            style={styles.exerciseImage}
             source={require('../assets/activities/relationships.png')}
           />
         )
       case 'sleep':
         return (
-          <Image
-            style={styles.face}
+          <ImageBackground
+            style={styles.exerciseImage}
             source={require('../assets/activities/sleep.png')}
           />
         )
       case 'work':
         return (
-          <Image
-            style={styles.face}
+          <ImageBackground
+            style={styles.exerciseImage}
             source={require('../assets/activities/work.png')}
           />
         )
@@ -1098,830 +1070,822 @@ export default class Main extends Component {
   render() {
 
     if (this.state.count == 12) {
+      this.sendDataToServer();
       this.props.navigation.navigate('Menu', { screen: 'Home' })
     }
-
+/*
+    console.log(this.state.num);
     console.log(this.state.count);
     console.log(this.state.selected);
+    console.log(this.state.totalList);
+    */
     
-
-    return (
-      <View style={styles.container}>
-        {this.state.count == 0 && // Initial Screen - Name
-          <View style={{ flex: 1 }}>
-            <View style={styles.wordTop}>
-              <View style={styles.progressBar}>
-                {this.state.progress.map((l, i) => (
-                  this.createProgressBar(l, i)
-                ))}
+    if (this.state.load) {
+      return (
+        <View style={styles.container}>
+          {this.state.count == 0 && // Initial Screen - Name
+            <View style={{ flex: 1 }}>
+              <View style={styles.wordTop}>
+                <View style={styles.progressBar}>
+                  {this.state.progress.map((l, i) => (
+                    this.createProgressBar(l, i)
+                  ))}
+                </View>
+                <Text style={styles.notice}>
+                  What is your name?
+                </Text>
               </View>
-              <Text style={styles.notice}>
-                What is your name?
+              <View style={styles.wordBody}>
+                <View style={styles.wordCol}>
+                  <TextInput
+                    style={styles.nameInput}
+                    onChangeText={(text) => this.setState({name : text})}
+                    placeholder={'Write your name here'}
+                  />
+                </View>
+              </View>
+              <View style={styles.wordBottom}>
+                <View style={styles.wordBlank} />
+                <View style={styles.wordBlank} />
+                {this.state.name == '' ?
+                  <View style={styles.wordBlank} />
+                  :
+                  <TouchableOpacity
+                    style={styles.nextButton}
+                    onPress={() => {
+                      this.setState({ count: this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                  >
+                    <MaterialCommunityIcons
+                      name="check-circle"
+                      size={Dimensions.get('window').width * 0.2}
+                      color="black"
+                    />
+                  </TouchableOpacity>
+                }
+              </View>
+            </View>
+          }
+          {this.state.count == 1 && // Initial Screen - Gender
+            <View style={{ flex: 1 }}>
+              <View style={styles.wordTop}>
+                <View style={styles.progressBar}>
+                  {this.state.progress.map((l, i) => (
+                    this.createProgressBar(l, i)
+                  ))}
+                </View>
+                <Text style={styles.notice}>
+                  What is your gender?
               </Text>
-            </View>
-            <View style={styles.wordBody}>
-            </View>
-            <View style={styles.wordBottom}>
-              <View style={styles.wordBlank} />
-              <View style={styles.wordBlank} />
-              <TouchableOpacity
-                style={styles.nextButton}
-                onPress={() => {
-                  this.setState({ count: this.state.count + 1 })
-                  this.increaseProgress()
-                }}
-              >
-                <MaterialCommunityIcons
-                  name="forward"
-                  size={Dimensions.get('window').width * 0.2}
-                  color="black"
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-        }
-        {this.state.count == 1 && // Initial Screen - Gender
-          <View style={{ flex: 1 }}>
-            <View style={styles.wordTop}>
-              <View style={styles.progressBar}>
-                {this.state.progress.map((l, i) => (
-                  this.createProgressBar(l, i)
-                ))}
               </View>
-              <Text style={styles.notice}>
-                What is your gender?
-            </Text>
-            </View>
-            <View style={styles.wordBody}>
-            </View>
-            <View style={styles.wordBottom}>
-              <TouchableOpacity
-                style={styles.prevButton}
-                onPress={() => {
-                  this.setState({ count: this.state.count - 1 })
-                  this.decreaseProgress()
-                }}
-              >
-                <MaterialCommunityIcons
-                  name="forward"
-                  size={Dimensions.get('window').width * 0.2}
-                  color="black"
-                />
-              </TouchableOpacity>
-              <View style={styles.wordBlank} />
-              <TouchableOpacity
-                style={styles.nextButton}
-                onPress={() => {
-                  this.setState({ count: this.state.count + 1 })
-                  this.increaseProgress()
-                }}
-              >
-                <MaterialCommunityIcons
-                  name="forward"
-                  size={Dimensions.get('window').width * 0.2}
-                  color="black"
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-        }
-        {this.state.count == 2 && // Initial Screen - Age
-          <View style={{ flex: 1 }}>
-            <View style={styles.wordTop}>
-              <View style={styles.progressBar}>
-                {this.state.progress.map((l, i) => (
-                  this.createProgressBar(l, i)
-                ))}
+              <View style={styles.wordBody}>
+                <View style={styles.wordCol}>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.setState({ gender : 'Male' })
+                    }}
+                  >
+                    <Text style={this.state.gender == 'Male' ? styles.genderSelectFill : styles.genderSelect}>
+                      Male
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.setState({ gender : 'Female' })
+                    }}
+                  >
+                    <Text style={this.state.gender == 'Female' ? styles.genderSelectFill : styles.genderSelect}>
+                      Female
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.wordCol}>
+                  <View style={styles.wordBlank}/>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.setState({ gender : 'Anonymous' })
+                    }}
+                  >
+                    <Text style={this.state.gender == 'Anonymous' ? styles.genderSelectFill : styles.genderSelect}>
+                      Anonymous
+                    </Text>
+                  </TouchableOpacity>
+                  <View style={styles.wordBlank}/>
+                </View>
               </View>
-              <Text style={styles.notice}>
-                How old are you?
-            </Text>
-            </View>
-            <View style={styles.wordBody}>
-            </View>
-            <View style={styles.wordBottom}>
-              <TouchableOpacity
-                style={styles.prevButton}
-                onPress={() => {
-                  this.setState({ count: this.state.count - 1 })
-                  this.decreaseProgress()
-                }}
-              >
-                <MaterialCommunityIcons
-                  name="forward"
-                  size={Dimensions.get('window').width * 0.2}
-                  color="black"
-                />
-              </TouchableOpacity>
-              <View style={styles.wordBlank} />
-              <TouchableOpacity
-                style={styles.nextButton}
-                onPress={() => {
-                  this.setState({ count: this.state.count + 1 })
-                  this.increaseProgress()
-                }}
-              >
-                <MaterialCommunityIcons
-                  name="forward"
-                  size={Dimensions.get('window').width * 0.2}
-                  color="black"
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-        }
-        {this.state.count == 3 && // Emotion Screen
-          <View style={{ flex: 1 }}>
-            <View style={styles.wordTop}>
-              <View style={styles.progressBar}>
-                {this.state.progress.map((l, i) => (
-                  this.createProgressBar(l, i)
-                ))}
+              <View style={styles.wordBottom}>
+                <View style={styles.wordBlank} />
+                <View style={styles.wordBlank} />
+                {this.state.gender == '' ?
+                  <View style={styles.wordBlank} />
+                  :
+                  <TouchableOpacity
+                    style={styles.nextButton}
+                    onPress={() => {
+                      this.setState({ count: this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                  >
+                    <MaterialCommunityIcons
+                      name="check-circle"
+                      size={Dimensions.get('window').width * 0.2}
+                      color="black"
+                    />
+                  </TouchableOpacity>
+                }
               </View>
-              <Text style={styles.notice}>
-                How do you feel today?
+            </View>
+          }
+          {this.state.count == 2 && // Initial Screen - Age
+            <View style={{ flex: 1 }}>
+              <View style={styles.wordTop}>
+                <View style={styles.progressBar}>
+                  {this.state.progress.map((l, i) => (
+                    this.createProgressBar(l, i)
+                  ))}
+                </View>
+                <Text style={styles.notice}>
+                  How old are you?
               </Text>
-            </View>
-            <View style={styles.wordBody}>
-              <View style={styles.wordCol}>
-                <View style={styles.wordBlank} />
-                <TouchableOpacity
-                  onPress={() => {
-                    this.createList('Good', this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                    this.increaseProgress()
-                  }}
-                  style={{ flex: 1 }}
-                >
-                  <Image
-                    style={styles.face}
-                    source={require('../assets/face/good.png')}
-                  />
-                </TouchableOpacity>
-                <View style={styles.wordBlank} />
               </View>
-              <View style={styles.wordCol}>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.createList('Neutral', this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                    this.increaseProgress()
-                  }}
-                  style={{ flex: 1 }}
-                >
-                  <Image
-                    style={styles.face}
-                    source={require('../assets/face/neutral.png')}
-                  />
-                </TouchableOpacity>
-                <View style={styles.wordBlank} />
-                <TouchableOpacity
-                  onPress={() => {
-                    this.createList('Awful', this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                    this.increaseProgress()
-                  }}
-                  style={{ flex: 1 }}
-                >
-                  <Image
-                    style={styles.face}
-                    source={require('../assets/face/awful.png')}
-                  />
-                </TouchableOpacity>
+              <View style={styles.wordBody}>
+                <View style={{flexDirection: 'row', flex: 1}}>
+                  <View style={styles.wordCol}>
+                    <TextInput
+                      style={styles.ageInput}
+                      onChangeText={(text) => this.setState({ age : text })}
+                      placeholder={'25'}
+                      maxLength={3}
+                      keyboardType='numeric'
+                    />
+                  </View>
+                  <View style={styles.wordCol}>
+                    <Text style={styles.ageText}>years old</Text>
+                  </View>
+                </View>
               </View>
-              <View style={{ marginTop: 20 }} />
-              <View style={styles.wordCol}>
+              <View style={styles.wordBottom}>
                 <View style={styles.wordBlank} />
-                <TouchableOpacity
-                  onPress={() => {
-                    this.createList('Great', this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                    this.increaseProgress()
-                  }}
-                  style={{ flex: 3 }}
-                >
-                  <Image
-                    style={styles.face}
-                    source={require('../assets/face/great.png')}
-                  />
-                </TouchableOpacity>
                 <View style={styles.wordBlank} />
-                <TouchableOpacity
-                  onPress={() => {
-                    this.createList('Bad', this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                    this.increaseProgress()
-                  }}
-                  style={{ flex: 3 }}
-                >
-                  <Image
-                    style={styles.face}
-                    source={require('../assets/face/bad.png')}
-                  />
-                </TouchableOpacity>
-                <View style={styles.wordBlank} />
+                {this.state.age == '' ?
+                  <View style={styles.wordBlank} />
+                  :
+                  <TouchableOpacity
+                    style={styles.nextButton}
+                    onPress={() => {
+                      this.setState({ count: this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                  >
+                    <MaterialCommunityIcons
+                      name="check-circle"
+                      size={Dimensions.get('window').width * 0.2}
+                      color="black"
+                    />
+                  </TouchableOpacity>
+                }
               </View>
             </View>
-            <View style={styles.wordBottom}>
-              <TouchableOpacity
-                style={styles.prevButton}
-                onPress={() => {
-                  this.setState({ count: this.state.count - 1 })
-                  this.decreaseProgress()
-                }}
-              >
-                <MaterialCommunityIcons
-                  name="forward"
-                  size={Dimensions.get('window').width * 0.2}
-                  color="black"
-                />
-              </TouchableOpacity>
-              <View style={styles.wordBlank} />
-              <View style={styles.wordBlank} />
-            </View>
-          </View>
-        }
-        {(this.state.count >= 4 && this.state.count < 8) &&
-          <View style={{ flex: 1 }}>
-            <View style={styles.wordTop}>
-              <View style={styles.progressBar}>
-                {this.state.progress.map((l, i) => (
-                  this.createProgressBar(l, i)
-                ))}
+          }
+          {this.state.count == 3 && // Emotion Initial Screen
+            <View style={{ flex: 1 }}>
+              <View style={styles.wordTop}>
+                <View style={styles.progressBar}>
+                  {this.state.progress.map((l, i) => (
+                    this.createProgressBar(l, i)
+                  ))}
+                </View>
+                <Text style={styles.notice}>
+                  How do you feel today?
+                </Text>
               </View>
-              <Text style={styles.notice}>
-                How do you feel today?
-              </Text>
-            </View>
-            <View style={styles.wordBody}>
-              <View style={styles.wordCol}>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.wordSpace[17], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                    this.increaseProgress()
-                  }}
-                >
-                  <Text style={styles.wordOut}>{this.state.wordSpace[17]}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.wordSpace[13], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                    this.increaseProgress()
-                  }}
-                >
-                  <Text style={styles.wordMiddle}>{this.state.wordSpace[13]}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.wordSpace[4], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                    this.increaseProgress()
-                  }}
-                >
-                  <Text style={styles.wordMiddle}>{this.state.wordSpace[4]}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.wordSpace[14], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                    this.increaseProgress()
-                  }}
-                >
-                  <Text style={styles.wordOut}>{this.state.wordSpace[14]}</Text>
-                </TouchableOpacity>
+              <View style={styles.wordBody}>
+                <View style={styles.wordCol}>
+                  <View style={styles.wordBlank} />
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.createList('Good', 0)
+                    }}
+                    style={{ flex: 1 }}
+                  >
+                    <Image
+                      style={styles.face}
+                      source={require('../assets/face/good.png')}
+                    />
+                  </TouchableOpacity>
+                  <View style={styles.wordBlank} />
+                </View>
+                <View style={styles.wordCol}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.createList('Neutral', 0)
+                      this.setState({ count : this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                    style={{ flex: 1 }}
+                  >
+                    <Image
+                      style={styles.face}
+                      source={require('../assets/face/neutral.png')}
+                    />
+                  </TouchableOpacity>
+                  <View style={styles.wordBlank} />
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.createList('Awful', 0)
+                      this.setState({ count : this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                    style={{ flex: 1 }}
+                  >
+                    <Image
+                      style={styles.face}
+                      source={require('../assets/face/awful.png')}
+                    />
+                  </TouchableOpacity>
+                </View>
+                <View style={{ marginTop: 20 }} />
+                <View style={styles.wordCol}>
+                  <View style={styles.wordBlank} />
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.createList('Great', 0)
+                      this.setState({ count : this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                    style={{ flex: 3 }}
+                  >
+                    <Image
+                      style={styles.face}
+                      source={require('../assets/face/great.png')}
+                    />
+                  </TouchableOpacity>
+                  <View style={styles.wordBlank} />
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.createList('Bad', 0)
+                      this.setState({ count : this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                    style={{ flex: 3 }}
+                  >
+                    <Image
+                      style={styles.face}
+                      source={require('../assets/face/bad.png')}
+                    />
+                  </TouchableOpacity>
+                  <View style={styles.wordBlank} />
+                </View>
               </View>
-              <View style={styles.wordCol}>
+              <View style={styles.wordBottom}>
                 <View style={styles.wordBlank} />
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.wordSpace[12], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                    this.increaseProgress()
-                  }}
-                >
-                  <Text style={styles.wordMiddle}>{this.state.wordSpace[12]}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.wordSpace[0], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                    this.increaseProgress()
-                  }}
-                >
-                  <Text style={styles.wordCenter}>{this.state.wordSpace[0]}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.wordSpace[5], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                    this.increaseProgress()
-                  }}
-                >
-                  <Text style={styles.wordMiddle}>{this.state.wordSpace[5]}</Text>
-                </TouchableOpacity>
                 <View style={styles.wordBlank} />
               </View>
-              <View style={styles.wordCol}>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.wordSpace[11], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                    this.increaseProgress()
-                  }}
-                >
-                  <Text style={styles.wordMiddle}>{this.state.wordSpace[11]}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.wordSpace[3], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                    this.increaseProgress()
-                  }}
-                >
-                  <Text style={styles.wordCenter}>{this.state.wordSpace[3]}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.wordSpace[1], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                    this.increaseProgress()
-                  }}
-                >
-                  <Text style={styles.wordCenter}>{this.state.wordSpace[1]}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.wordSpace[6], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                    this.increaseProgress()
-                  }}
-                >
-                  <Text style={styles.wordMiddle}>{this.state.wordSpace[6]}</Text>
-                </TouchableOpacity>
+            </View>
+          }
+          {(this.state.count >= 4 && this.state.count < 8) && // Emotion Screen
+            <View style={{ flex: 1 }}>
+              <View style={styles.wordTop}>
+                <View style={styles.progressBar}>
+                  {this.state.progress.map((l, i) => (
+                    this.createProgressBar(l, i)
+                  ))}
+                </View>
+                <Text style={styles.notice}>
+                  How do you feel today?
+                </Text>
               </View>
-              <View style={styles.wordCol}>
+              <View style={styles.wordBody}>
+                <View style={styles.wordCol}>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.wordSpace[17][0], 17)
+                      this.setState({ count : this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                  >
+                    <Text style={styles.wordOut}>{this.state.wordSpace[17][0]}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.wordSpace[13][0], 13)
+                      this.setState({ count : this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                  >
+                    <Text style={styles.wordMiddle}>{this.state.wordSpace[13][0]}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.wordSpace[4][0], 4)
+                      this.setState({ count : this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                  >
+                    <Text style={styles.wordMiddle}>{this.state.wordSpace[4][0]}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.wordSpace[14][0], 14)
+                      this.setState({ count : this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                  >
+                    <Text style={styles.wordOut}>{this.state.wordSpace[14][0]}</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.wordCol}>
+                  <View style={styles.wordBlank} />
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.wordSpace[12][0], 12)
+                      this.setState({ count : this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                  >
+                    <Text style={styles.wordMiddle}>{this.state.wordSpace[12][0]}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.wordSpace[0][0], 0)
+                      this.setState({ count : this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                  >
+                    <Text style={styles.wordCenter}>{this.state.wordSpace[0][0]}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.wordSpace[5][0], 5)
+                      this.setState({ count : this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                  >
+                    <Text style={styles.wordMiddle}>{this.state.wordSpace[5][0]}</Text>
+                  </TouchableOpacity>
+                  <View style={styles.wordBlank} />
+                </View>
+                <View style={styles.wordCol}>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.wordSpace[11][0], 11)
+                      this.setState({ count : this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                  >
+                    <Text style={styles.wordMiddle}>{this.state.wordSpace[11][0]}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.wordSpace[3][0], 3)
+                      this.setState({ count : this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                  >
+                    <Text style={styles.wordCenter}>{this.state.wordSpace[3][0]}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.wordSpace[1][0], 1)
+                      this.setState({ count : this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                  >
+                    <Text style={styles.wordCenter}>{this.state.wordSpace[1][0]}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.wordSpace[6][0], 6)
+                      this.setState({ count : this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                  >
+                    <Text style={styles.wordMiddle}>{this.state.wordSpace[6][0]}</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.wordCol}>
+                  <View style={styles.wordBlank} />
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.wordSpace[10][0], 10)
+                      this.setState({ count : this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                  >
+                    <Text style={styles.wordMiddle}>{this.state.wordSpace[10][0]}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.wordSpace[2][0], 2)
+                      this.setState({ count : this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                  >
+                    <Text style={styles.wordCenter}>{this.state.wordSpace[2][0]}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.wordSpace[7][0], 7)
+                      this.setState({ count : this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                  >
+                    <Text style={styles.wordMiddle}>{this.state.wordSpace[7][0]}</Text>
+                  </TouchableOpacity>
+                  <View style={styles.wordBlank} />
+                </View>
+                <View style={styles.wordCol}>
+                <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.wordSpace[16][0], 16)
+                      this.setState({ count : this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                  >
+                    <Text style={styles.wordOut}>{this.state.wordSpace[16][0]}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.wordSpace[9][0], 9)
+                      this.setState({ count : this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                  >
+                    <Text style={styles.wordMiddle}>{this.state.wordSpace[9][0]}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.wordSpace[8][0], 8)
+                      this.setState({ count : this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                  >
+                    <Text style={styles.wordMiddle}>{this.state.wordSpace[8][0]}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.wordSpace[15][0], 15)
+                      this.setState({ count : this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                  >
+                    <Text style={styles.wordOut}>{this.state.wordSpace[15][0]}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View style={styles.wordBottom}>
                 <View style={styles.wordBlank} />
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.wordSpace[10], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                    this.increaseProgress()
-                  }}
-                >
-                  <Text style={styles.wordMiddle}>{this.state.wordSpace[10]}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.wordSpace[2], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                    this.increaseProgress()
-                  }}
-                >
-                  <Text style={styles.wordCenter}>{this.state.wordSpace[2]}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.wordSpace[7], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                    this.increaseProgress()
-                  }}
-                >
-                  <Text style={styles.wordMiddle}>{this.state.wordSpace[7]}</Text>
-                </TouchableOpacity>
                 <View style={styles.wordBlank} />
               </View>
-              <View style={styles.wordCol}>
-              <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.wordSpace[16], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                    this.increaseProgress()
-                  }}
-                >
-                  <Text style={styles.wordOut}>{this.state.wordSpace[16]}</Text>
-                </TouchableOpacity>
+            </View>
+          }
+          {(this.state.count >= 8 && this.state.count < 10) && // State Screen
+            <View style={{ flex: 1 }}>
+              <View style={styles.wordTop}>
+                <View style={styles.progressBar}>
+                  {this.state.progress.map((l, i) => (
+                    this.createProgressBar(l, i)
+                  ))}
+                </View>
+                <Text style={styles.notice}>
+                  How do you feel today?
+                </Text>
+              </View>
+              <View style={styles.wordBody}>
+                <View style={styles.wordCol}>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.stateSpace[8][0], 8)
+                      this.setState({ count : this.state.count + 1 })
+                    }} 
+                  >
+                    <Text style={styles.stateOut}>{this.state.stateSpace[8][0]}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.stateSpace[9][0], 9)
+                      this.setState({ count : this.state.count + 1 })
+                    }} 
+                  >
+                    <Text style={styles.stateOut}>{this.state.stateSpace[9][0]}</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.wordCol}>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.stateSpace[4][0], 4)
+                      this.setState({ count : this.state.count + 1 })
+                    }} 
+                  >
+                    <Text style={styles.stateMiddle}>{this.state.stateSpace[4][0]}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.stateSpace[5][0], 5)
+                      this.setState({ count : this.state.count + 1 })
+                    }} 
+                  >
+                    <Text style={styles.stateMiddle}>{this.state.stateSpace[5][0]}</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.wordCol}>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.stateSpace[0][0], 0)
+                      this.setState({ count : this.state.count + 1 })
+                    }} 
+                  >
+                    <Text style={styles.stateCenter}>{this.state.stateSpace[0][0]}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.stateSpace[1][0], 1)
+                      this.setState({ count : this.state.count + 1 })
+                    }} 
+                  >
+                    <Text style={styles.stateCenter}>{this.state.stateSpace[1][0]}</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.wordCol}>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.stateSpace[2][0], 2)
+                      this.setState({ count : this.state.count + 1 })
+                    }} 
+                  >
+                    <Text style={styles.stateMiddle}>{this.state.stateSpace[2][0]}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.stateSpace[3][0], 3)
+                      this.setState({ count : this.state.count + 1 })
+                    }} 
+                  >
+                    <Text style={styles.stateMiddle}>{this.state.stateSpace[3][0]}</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.wordCol}>
                 <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.wordSpace[9], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                    this.increaseProgress()
-                  }}
-                >
-                  <Text style={styles.wordMiddle}>{this.state.wordSpace[9]}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.wordSpace[8], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                    this.increaseProgress()
-                  }}
-                >
-                  <Text style={styles.wordMiddle}>{this.state.wordSpace[8]}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.wordSpace[15], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                    this.increaseProgress()
-                  }}
-                >
-                  <Text style={styles.wordOut}>{this.state.wordSpace[15]}</Text>
-                </TouchableOpacity>
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.stateSpace[6][0], 6)
+                      this.setState({ count : this.state.count + 1 })
+                    }} 
+                  >
+                    <Text style={styles.stateOut}>{this.state.stateSpace[6][0]}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.createList(this.state.stateSpace[7][0], 7)
+                      this.setState({ count : this.state.count + 1 })
+                    }} 
+                  >
+                    <Text style={styles.stateOut}>{this.state.stateSpace[7][0]}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View style={styles.wordBottom}>
+                <View style={styles.wordBlank} />
+                <View style={styles.wordBlank} />
               </View>
             </View>
-            <View style={styles.wordBottom}>
-              <TouchableOpacity
-                style={styles.prevButton}
-                onPress={() => {
-
-                  var count = this.state.count
-
-                  console.log(count);
-                  if (count != 4) {
-                    this.createList(this.state.selected[count - 5].word, count - 2, false)
-                  } else {
-                    this.setState({ selected : [], V: 0, A: 0, D: 0 })
-                  }
-
-
-                  this.setState({ count: count - 1 })
-                  this.decreaseProgress()
-                  this.decreaseProgress()
-                }}
-              >
-                <MaterialCommunityIcons
-                  name="forward"
-                  size={Dimensions.get('window').width * 0.2}
-                  color="black"
-                />
-              </TouchableOpacity>
-              <View style={styles.wordBlank} />
-              <View style={styles.wordBlank} />
+          }
+          {this.state.count == 10 && // Exercise Screen
+            <View style={{ flex: 1 }}>
+              <View style={styles.wordTop}>
+                <View style={styles.progressBar}>
+                  {this.state.progress.map((l, i) => (
+                    this.createProgressBar(l, i)
+                  ))}
+                </View>
+                <Text style={styles.notice}>
+                  Would you like to describe what made you feel this way?
+                </Text>
+              </View>
+              <View style={styles.wordBody}>
+                <View style={styles.wordCol}>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.setState({ activity: 'exercise' })
+                      this.setState({ count: this.state.count + 1 })
+                      this.increaseProgress();
+                    }}>
+                    <Image
+                      style={styles.face}
+                      source={require('../assets/activities/exercise.png')}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.setState({ activity: 'family' })
+                      this.setState({ count: this.state.count + 1 })
+                      this.increaseProgress()
+                    }}>
+                    <Image
+                      style={styles.face}
+                      source={require('../assets/activities/family.png')}
+                    />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.wordCol}>
+                <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.setState({ activity: 'finances' })
+                      this.setState({ count: this.state.count + 1 })
+                      this.increaseProgress()
+                    }}>
+                    <Image
+                      style={styles.face}
+                      source={require('../assets/activities/finances.png')}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.setState({ activity: 'friends' })
+                      this.setState({ count: this.state.count + 1 })
+                      this.increaseProgress()
+                    }}>
+                    <Image
+                      style={styles.face}
+                      source={require('../assets/activities/friends.png')}
+                    />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.wordCol}>
+                <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.setState({ activity: 'health' })
+                      this.setState({ count: this.state.count + 1 })
+                      this.increaseProgress()
+                    }}>
+                    <Image
+                      style={styles.face}
+                      source={require('../assets/activities/health.png')}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.setState({ activity: 'hobbies' })
+                      this.setState({ count: this.state.count + 1 })
+                      this.increaseProgress()
+                    }}>
+                    <Image
+                      style={styles.face}
+                      source={require('../assets/activities/hobbies.png')}
+                    />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.wordCol}>
+                <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.setState({ activity: 'location' })
+                      this.setState({ count: this.state.count + 1 })
+                      this.increaseProgress()
+                    }}>
+                    <Image
+                      style={styles.face}
+                      source={require('../assets/activities/location.png')}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.setState({ activity: 'relationships' })
+                      this.setState({ count: this.state.count + 1 })
+                      this.increaseProgress()
+                    }}>
+                    <Image
+                      style={styles.face}
+                      source={require('../assets/activities/relationships.png')}
+                    />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.wordCol}>
+                <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.setState({ activity: 'sleep' })
+                      this.setState({ count: this.state.count + 1 })
+                      this.increaseProgress()
+                    }}>
+                    <Image
+                      style={styles.face}
+                      source={require('../assets/activities/sleep.png')}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.wordSpace}
+                    onPress={() => {
+                      this.setState({ activity: 'work' })
+                      this.setState({ count: this.state.count + 1 })
+                      this.increaseProgress()
+                    }}>
+                    <Image
+                      style={styles.face}
+                      source={require('../assets/activities/work.png')}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View style={styles.wordBottom}>
+                <View style={styles.wordBlank} />
+                <View style={styles.wordBlank} />
+              </View>
             </View>
-          </View>
-        }
-        {(this.state.count >= 8 && this.state.count < 10) &&
-          <View style={{ flex: 1 }}>
-            <View style={styles.wordTop}>
-              <View style={styles.progressBar}>
-                {this.state.progress.map((l, i) => (
-                  this.createProgressBar(l, i)
-                ))}
+          }
+          {this.state.count == 11 && // Exercise Detail Screen
+            <View style={{ flex: 1 }}>
+              <View style={styles.wordTop}>
+                <View style={styles.progressBar}>
+                  {this.state.progress.map((l, i) => (
+                    this.createProgressBar(l, i)
+                  ))}
+                </View>
+                <Text style={styles.notice}>
+                  Please write the reasons why you chose this activity
+                </Text>
               </View>
-              <Text style={styles.notice}>
-                How do you feel today?
-              </Text>
-            </View>
-            <View style={styles.wordBody}>
-              <View style={styles.wordCol}>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.stateSpace[8], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                  }} 
-                >
-                  <Text style={styles.stateOut}>{this.state.stateSpace[8]}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.stateSpace[9], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                  }} 
-                >
-                  <Text style={styles.stateOut}>{this.state.stateSpace[9]}</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.wordCol}>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.stateSpace[4], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                  }} 
-                >
-                  <Text style={styles.stateMiddle}>{this.state.stateSpace[4]}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.stateSpace[5], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                  }} 
-                >
-                  <Text style={styles.stateMiddle}>{this.state.stateSpace[5]}</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.wordCol}>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.stateSpace[0], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                  }} 
-                >
-                  <Text style={styles.stateCenter}>{this.state.stateSpace[0]}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.stateSpace[1], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                  }} 
-                >
-                  <Text style={styles.stateCenter}>{this.state.stateSpace[1]}</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.wordCol}>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.stateSpace[2], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                  }} 
-                >
-                  <Text style={styles.stateMiddle}>{this.state.stateSpace[2]}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.stateSpace[3], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                  }} 
-                >
-                  <Text style={styles.stateMiddle}>{this.state.stateSpace[3]}</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.wordCol}>
-               <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.stateSpace[6], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                  }} 
-                >
-                  <Text style={styles.stateOut}>{this.state.stateSpace[6]}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.createList(this.state.stateSpace[7], this.state.count, true)
-                    this.setState({ count : this.state.count + 1 })
-                  }} 
-                >
-                  <Text style={styles.stateOut}>{this.state.stateSpace[7]}</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-            <View style={styles.wordBottom}>
-              <TouchableOpacity
-                style={styles.prevButton}
-                onPress={() => {
-                  var selected = this.state.selected
-                  selected.pop();
-                  var count = this.state.count - 1;
-                  this.setState({ count: count })
-                  this.setState({ selected: selected })
-                  this.decreaseProgress()
-                }}
-              >
-                <MaterialCommunityIcons
-                  name="forward"
-                  size={Dimensions.get('window').width * 0.2}
-                  color="black"
-                />
-              </TouchableOpacity>
-              <View style={styles.wordBlank} />
-              <View style={styles.wordBlank} />
-            </View>
-          </View>
-        }
-        {this.state.count == 10 &&
-          <View style={{ flex: 1 }}>
-            <View style={styles.wordTop}>
-              <View style={styles.progressBar}>
-                {this.state.progress.map((l, i) => (
-                  this.createProgressBar(l, i)
-                ))}
-              </View>
-              <Text style={styles.notice}>
-                Would you like to describe what made you feel this way?
-              </Text>
-            </View>
-            <View style={styles.wordBody}>
-              <View style={styles.wordCol}>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.setState({ activity: 'exercise' })
-                    this.setState({ count: this.state.count + 1 })
-                    this.increaseProgress();
-                  }}>
-                  <Image
-                    style={styles.face}
-                    source={require('../assets/activities/exercise.png')}
+              <View style={styles.wordBody}>
+                <View style={styles.exerciseBox}>
+                  {this.getActivity()}
+                  <TextInput
+                    style={styles.exerciseInput}
+                    onChangeText={(text) => this.setState({ content : text })}
+                    placeholder={'Start Writing'}
+                    multiline={true}
                   />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.setState({ activity: 'family' })
-                    this.setState({ count: this.state.count + 1 })
-                    this.increaseProgress()
-                  }}>
-                  <Image
-                    style={styles.face}
-                    source={require('../assets/activities/family.png')}
-                  />
-                </TouchableOpacity>
+                </View>
               </View>
-              <View style={styles.wordCol}>
-              <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.setState({ activity: 'finances' })
-                    this.setState({ count: this.state.count + 1 })
-                    this.increaseProgress()
-                  }}>
-                  <Image
-                    style={styles.face}
-                    source={require('../assets/activities/finances.png')}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.setState({ activity: 'friends' })
-                    this.setState({ count: this.state.count + 1 })
-                    this.increaseProgress()
-                  }}>
-                  <Image
-                    style={styles.face}
-                    source={require('../assets/activities/friends.png')}
-                  />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.wordCol}>
-              <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.setState({ activity: 'health' })
-                    this.setState({ count: this.state.count + 1 })
-                    this.increaseProgress()
-                  }}>
-                  <Image
-                    style={styles.face}
-                    source={require('../assets/activities/health.png')}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.setState({ activity: 'hobbies' })
-                    this.setState({ count: this.state.count + 1 })
-                    this.increaseProgress()
-                  }}>
-                  <Image
-                    style={styles.face}
-                    source={require('../assets/activities/hobbies.png')}
-                  />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.wordCol}>
-              <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.setState({ activity: 'location' })
-                    this.setState({ count: this.state.count + 1 })
-                    this.increaseProgress()
-                  }}>
-                  <Image
-                    style={styles.face}
-                    source={require('../assets/activities/location.png')}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.setState({ activity: 'relationships' })
-                    this.setState({ count: this.state.count + 1 })
-                    this.increaseProgress()
-                  }}>
-                  <Image
-                    style={styles.face}
-                    source={require('../assets/activities/relationships.png')}
-                  />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.wordCol}>
-              <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.setState({ activity: 'sleep' })
-                    this.setState({ count: this.state.count + 1 })
-                    this.increaseProgress()
-                  }}>
-                  <Image
-                    style={styles.face}
-                    source={require('../assets/activities/sleep.png')}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.wordSpace}
-                  onPress={() => {
-                    this.setState({ activity: 'work' })
-                    this.setState({ count: this.state.count + 1 })
-                    this.increaseProgress()
-                  }}>
-                  <Image
-                    style={styles.face}
-                    source={require('../assets/activities/work.png')}
-                  />
-                </TouchableOpacity>
+              <View style={styles.wordBottom}>
+                <View style={styles.wordBlank} />
+                <View style={styles.wordBlank} />
+                {this.state.content == '' ?
+                  <View style={styles.wordBlank} />
+                  :
+                  <TouchableOpacity
+                    style={styles.nextButton}
+                    onPress={() => {
+                      this.setState({ count: this.state.count + 1 })
+                      this.increaseProgress()
+                    }}
+                  >
+                    <MaterialCommunityIcons
+                      name="check-circle"
+                      size={Dimensions.get('window').width * 0.2}
+                      color="black"
+                    />
+                  </TouchableOpacity>
+                }
               </View>
             </View>
-            <View style={styles.wordBottom}>
-              <TouchableOpacity
-                style={styles.prevButton}
-                onPress={() => {
-                  var selected = this.state.selected
-                  selected.pop();
-                  this.setState({ count: this.state.count - 1 })
-                  this.setState({ selected: selected })
-                  this.decreaseProgress()
-                }}
-              >
-                <MaterialCommunityIcons
-                  name="forward"
-                  size={Dimensions.get('window').width * 0.2}
-                  color="black"
-                />
-              </TouchableOpacity>
-              <View style={styles.wordBlank} />
-              <View style={styles.wordBlank} />
-            </View>
-          </View>
-        }
-        {this.state.count == 11 &&
-          <View style={{ flex: 1 }}>
-            <View style={styles.wordTop}>
-              <View style={styles.progressBar}>
-                {this.state.progress.map((l, i) => (
-                  this.createProgressBar(l, i)
-                ))}
-              </View>
-              <Text style={styles.notice}>
-                Please write down the reason why you chose this activity
-              </Text>
-            </View>
-            <View style={styles.wordBody}>
-              <View style={styles.wordCol}>
-                {this.getActivity()}
-              </View>
-              <View style={styles.wordCol}/>
-            </View>
-            <View style={styles.wordBottom}>
-              <TouchableOpacity
-                style={styles.prevButton}
-                onPress={() => {
-                  this.setState({ count: this.state.count - 1 })
-                  this.decreaseProgress()
-                }}
-              >
-                <MaterialCommunityIcons
-                  name="forward"
-                  size={Dimensions.get('window').width * 0.2}
-                  color="black"
-                />
-              </TouchableOpacity>
-              <View style={styles.wordBlank} />
-              <View style={styles.wordBlank} />
-            </View>
-          </View>
-        }
-      </View>
-    );
+          }
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.container}>
+          <Text>Now Loading</Text>
+        </View>
+      );
+    }
   }
 }
 
@@ -2011,6 +1975,71 @@ const styles = StyleSheet.create({
   },
   wordBlank: {
     flex: 1,
+  },
+  nameInput: {
+    flex: 1,
+    padding: 20,
+    width: '100%',
+    height: '100%',
+    fontSize: 30,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+  },
+  genderSelect: {
+    width: Dimensions.get('window').width * 0.4,
+    height: Dimensions.get('window').width * 0.4,
+    fontSize: 25,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    borderRadius: 100,
+    opacity: 0.99,
+
+    backgroundColor: "#FFF",
+    color: '#000',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 10,
+      height: 10,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 10,
+
+    elevation: 10,
+  },
+  genderSelectFill: {
+    width: Dimensions.get('window').width * 0.4,
+    height: Dimensions.get('window').width * 0.4,
+    fontSize: 25,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    borderRadius: 100,
+    opacity: 0.99,
+
+    backgroundColor: "#000",
+    color: '#FFF',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 10,
+      height: 10,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 10,
+
+    elevation: 10,
+  },
+  ageInput: {
+    flex: 1,
+    padding: 10,
+    fontSize: 30,
+    textAlign: 'right',
+    textAlignVertical: 'center',
+  },
+  ageText: {
+    flex: 1,
+    padding: 10,
+    fontSize: 30,
+    textAlign: 'left',
+    textAlignVertical: 'center',
   },
   faceSpace: {
     flex: 1,
@@ -2172,5 +2201,35 @@ const styles = StyleSheet.create({
 
     elevation: 10,
   },
+  exerciseBox: {
+    flex: 1,
+    margin: 10,
+    padding: 20,
+    borderRadius: 30,
 
+    backgroundColor: "#FFF",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 30,
+
+    elevation: 10,
+  },
+  exerciseImage: {
+    padding: 10,
+    width: Dimensions.get('window').height * 0.13,
+    height: Dimensions.get('window').height * 0.13,
+    resizeMode: 'contain',
+    position: 'absolute',
+  },
+  exerciseInput: {
+    flex: 5,
+    fontSize: 20,
+    marginTop: Dimensions.get('window').height * 0.13 + 10,
+    textAlign: 'left',
+    textAlignVertical: 'top',
+  },
 });

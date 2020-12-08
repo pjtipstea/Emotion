@@ -10,6 +10,7 @@ import HomeScreen from './HomeScreen';
 import InsightsScreen from './InsightsScreen';
 import MonitorScreen from './MonitorScreen';
 import EntriesScreen from './EntriesScreen';
+import { HeaderTitle } from '@react-navigation/stack';
 
 export default function BottomTabNavigator({ navigation, route }) {
     return (
@@ -17,7 +18,7 @@ export default function BottomTabNavigator({ navigation, route }) {
             initialRouteName={INITIAL_ROUTE_NAME}
             tabBarOptions={{
                 activeTintColor: 'black',
-                inactiveTintColor: 'grey',
+                inactiveTintColor: '#999',
             }}
         >
             <BottomTab.Screen
@@ -26,31 +27,32 @@ export default function BottomTabNavigator({ navigation, route }) {
                 initialParams={{ set: true }}
                 options={{
                     title: 'Home',
-                    tabBarIcon: ({ focused }) => focused ? <AntDesign name="home" size={24} color="black" /> : <AntDesign name="home" size={24} color="grey" />
+                    tabBarIcon: ({ focused }) => focused ? <AntDesign name="home" size={24} color="black" /> : <AntDesign name="home" size={24} color="#999" />,
                 }}
+
             />
             <BottomTab.Screen
                 name="Insights"
                 component={InsightsScreen}
                 options={{
-                    title: '활동',
-                    tabBarIcon: ({ focused }) => focused ? <SimpleLineIcons name="graph" size={24} color="black" /> : <SimpleLineIcons name="graph" size={24} color="grey" />
+                    title: 'Insights',
+                    tabBarIcon: ({ focused }) => focused ? <SimpleLineIcons name="graph" size={24} color="black" /> : <SimpleLineIcons name="graph" size={24} color="#999" />
                 }}
             />
             <BottomTab.Screen
                 name="Monitor"
                 component={MonitorScreen}
                 options={{
-                    title: '공지사항',
-                    tabBarIcon: ({ focused }) => focused ? <Entypo name="compass" size={24} color="black" /> : <Entypo name="compass" size={24} color="grey" />
+                    title: 'Monitor',
+                    tabBarIcon: ({ focused }) => focused ? <Entypo name="compass" size={24} color="black" /> : <Entypo name="compass" size={24} color="#999" />
                 }}
             />
             <BottomTab.Screen
                 name="Entries"
                 component={EntriesScreen}
                 options={{
-                    title: '내정보',
-                    tabBarIcon: ({ focused }) => focused ? <MaterialCommunityIcons name="calendar-month" size={24} color="black" /> : <MaterialCommunityIcons name="calendar-month" size={24} color="grey" />
+                    title: 'Entries',
+                    tabBarIcon: ({ focused }) => focused ? <MaterialCommunityIcons name="calendar-month" size={24} color="black" /> : <MaterialCommunityIcons name="calendar-month" size={24} color="#999" />
                 }}
             />
         </BottomTab.Navigator>
