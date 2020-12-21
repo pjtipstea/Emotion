@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import * as Font from 'expo-font'
 
 import Login from './screen/Login';
 import Main from './screen/Main';
@@ -24,6 +25,7 @@ export default function App() {
       </Stack.Navigator>
     </NavigationContainer>
   );
+  
 }
 
 const styles = StyleSheet.create({
