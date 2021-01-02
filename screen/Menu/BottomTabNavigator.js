@@ -11,6 +11,10 @@ import InsightsScreen from './InsightsScreen';
 import MonitorScreen from './MonitorScreen';
 import EntriesScreen from './EntriesScreen';
 import { HeaderTitle } from '@react-navigation/stack';
+import HomeStack from '../Home/HomeStack';
+import InsightsStack from '../Insights/InsightsStack';
+import MonitorStack from '../Monitor/MonitorStack';
+import EntiresStack from '../Entries/EntriesStack';
 
 export default function BottomTabNavigator({ navigation, route }) {
     return (
@@ -22,8 +26,8 @@ export default function BottomTabNavigator({ navigation, route }) {
             }}
         >
             <BottomTab.Screen
-                name="Home"
-                component={HomeScreen}
+                name="HomeStack"
+                component={HomeStack}
                 initialParams={{ set: true }}
                 options={{
                     title: 'Home',
@@ -32,24 +36,24 @@ export default function BottomTabNavigator({ navigation, route }) {
 
             />
             <BottomTab.Screen
-                name="Insights"
-                component={InsightsScreen}
+                name="InsightsStack"
+                component={InsightsStack}
                 options={{
                     title: 'Insights',
                     tabBarIcon: ({ focused }) => focused ? <SimpleLineIcons name="graph" size={24} color="black" /> : <SimpleLineIcons name="graph" size={24} color="#999" />
                 }}
             />
             <BottomTab.Screen
-                name="Monitor"
-                component={MonitorScreen}
+                name="MonitorStack"
+                component={MonitorStack}
                 options={{
                     title: 'Monitor',
                     tabBarIcon: ({ focused }) => focused ? <Entypo name="compass" size={24} color="black" /> : <Entypo name="compass" size={24} color="#999" />
                 }}
             />
             <BottomTab.Screen
-                name="Entries"
-                component={EntriesScreen}
+                name="EntriesStack"
+                component={EntiresStack}
                 options={{
                     title: 'Entries',
                     tabBarIcon: ({ focused }) => focused ? <MaterialCommunityIcons name="calendar-month" size={24} color="black" /> : <MaterialCommunityIcons name="calendar-month" size={24} color="#999" />

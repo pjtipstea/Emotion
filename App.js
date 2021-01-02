@@ -5,8 +5,8 @@ import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import * as Font from 'expo-font'
 
-import Login from './screen/Login';
-import Main from './screen/Main';
+import Login from './screen/Login/Login';
+import Main from './screen/Login/Main';
 import BottomTabNavigator from './screen/Menu/BottomTabNavigator';
 
 const Stack = createStackNavigator();
@@ -19,8 +19,8 @@ export default function App() {
         headerShown: false,
       }}
       >
-        <Stack.Screen name="Main" component={Main} />
         <Stack.Screen name="Menu" component={BottomTabNavigator} />
+        <Stack.Screen name="Main" component={Main} />
         <Stack.Screen name="Login" component={Login} />
       </Stack.Navigator>
     </NavigationContainer>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, TextInput, ImageBackground, Animated, LogBox } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Fonts } from '../assets/fonts/Font';
+import { Fonts } from '../../assets/fonts/Font';
 
 LogBox.ignoreAllLogs();
 
@@ -1146,70 +1146,70 @@ export default class Main extends Component {
         return (
           <ImageBackground
             style={styles.exerciseImage}
-            source={require('../assets/activities/exercise.png')}
+            source={require('../../assets/activities/exercise.png')}
           />
         )
       case 'family':
         return (
           <ImageBackground
             style={styles.exerciseImage}
-            source={require('../assets/activities/family.png')}
+            source={require('../../assets/activities/family.png')}
           />
         )
       case 'finances':
         return (
           <ImageBackground
             style={styles.exerciseImage}
-            source={require('../assets/activities/finances.png')}
+            source={require('../../assets/activities/finances.png')}
           />
         )
       case 'friends':
         return (
           <ImageBackground
             style={styles.exerciseImage}
-            source={require('../assets/activities/friends.png')}
+            source={require('../../assets/activities/friends.png')}
           />
         )
       case 'health':
         return (
           <ImageBackground
             style={styles.exerciseImage}
-            source={require('../assets/activities/health.png')}
+            source={require('../../assets/activities/health.png')}
           />
         )
       case 'hobbies':
         return (
           <ImageBackground
             style={styles.exerciseImage}
-            source={require('../assets/activities/hobbies.png')}
+            source={require('../../assets/activities/hobbies.png')}
           />
         )
       case 'location':
         return (
           <ImageBackground
             style={styles.exerciseImage}
-            source={require('../assets/activities/location.png')}
+            source={require('../../assets/activities/location.png')}
           />
         )
       case 'relationships':
         return (
           <ImageBackground
             style={styles.exerciseImage}
-            source={require('../assets/activities/relationships.png')}
+            source={require('../../assets/activities/relationships.png')}
           />
         )
       case 'sleep':
         return (
           <ImageBackground
             style={styles.exerciseImage}
-            source={require('../assets/activities/sleep.png')}
+            source={require('../../assets/activities/sleep.png')}
           />
         )
       case 'work':
         return (
           <ImageBackground
             style={styles.exerciseImage}
-            source={require('../assets/activities/work.png')}
+            source={require('../../assets/activities/work.png')}
           />
         )
     }
@@ -1574,7 +1574,7 @@ export default class Main extends Component {
                     >
                       <Image
                         style={styles.face}
-                        source={require('../assets/face/good.png')}
+                        source={require('../../assets/face/good.png')}
                       />
                     </TouchableOpacity>
                   </Animated.View>
@@ -1595,7 +1595,7 @@ export default class Main extends Component {
                     >
                       <Image
                         style={styles.face}
-                        source={require('../assets/face/neutral.png')}
+                        source={require('../../assets/face/neutral.png')}
                       />
                     </TouchableOpacity>
                   </Animated.View>
@@ -1614,7 +1614,7 @@ export default class Main extends Component {
                     >
                       <Image
                         style={styles.face}
-                        source={require('../assets/face/awful.png')}
+                        source={require('../../assets/face/awful.png')}
                       />
                     </TouchableOpacity>
                   </Animated.View>
@@ -1636,7 +1636,7 @@ export default class Main extends Component {
                     >
                       <Image
                         style={styles.face}
-                        source={require('../assets/face/great.png')}
+                        source={require('../../assets/face/great.png')}
                       />
                     </TouchableOpacity>
                   </Animated.View>
@@ -1655,7 +1655,7 @@ export default class Main extends Component {
                     >
                       <Image
                         style={styles.face}
-                        source={require('../assets/face/bad.png')}
+                        source={require('../../assets/face/bad.png')}
                       />
                     </TouchableOpacity>
                   </Animated.View>
@@ -2127,12 +2127,12 @@ export default class Main extends Component {
                     {this.state.activitySelected[0] == 0 ?
                       <Image
                         style={styles.face}
-                        source={require('../assets/activities/exercise.png')}
+                        source={require('../../assets/activities/exercise.png')}
                       />
                     :
                       <Image
                         style={styles.face}
-                        source={require('../assets/activities/exerciseSelect.png')}
+                        source={require('../../assets/activities/exerciseSelect.png')}
                       />
                     }
                   </TouchableOpacity>
@@ -2145,12 +2145,12 @@ export default class Main extends Component {
                     {this.state.activitySelected[1] == 0 ?
                       <Image
                         style={styles.face}
-                        source={require('../assets/activities/family.png')}
+                        source={require('../../assets/activities/family.png')}
                       />
                     :
                       <Image
                         style={styles.face}
-                        source={require('../assets/activities/familySelect.png')}
+                        source={require('../../assets/activities/familySelect.png')}
                       />
                     }
                   </TouchableOpacity>
@@ -2165,12 +2165,12 @@ export default class Main extends Component {
                     {this.state.activitySelected[2] == 0 ?
                       <Image
                         style={styles.face}
-                        source={require('../assets/activities/finances.png')}
+                        source={require('../../assets/activities/finances.png')}
                       />
                     :
                       <Image
                         style={styles.face}
-                        source={require('../assets/activities/financesSelect.png')}
+                        source={require('../../assets/activities/financesSelect.png')}
                       />
                     }
                   </TouchableOpacity>
@@ -2183,12 +2183,12 @@ export default class Main extends Component {
                     {this.state.activitySelected[3] == 0 ?
                       <Image
                         style={styles.face}
-                        source={require('../assets/activities/friends.png')}
+                        source={require('../../assets/activities/friends.png')}
                       />
                     :
                       <Image
                         style={styles.face}
-                        source={require('../assets/activities/friendsSelect.png')}
+                        source={require('../../assets/activities/friendsSelect.png')}
                       />
                     }
                   </TouchableOpacity>
@@ -2203,12 +2203,12 @@ export default class Main extends Component {
                     {this.state.activitySelected[4] == 0 ?
                       <Image
                         style={styles.face}
-                        source={require('../assets/activities/health.png')}
+                        source={require('../../assets/activities/health.png')}
                       />
                     :
                       <Image
                         style={styles.face}
-                        source={require('../assets/activities/healthSelect.png')}
+                        source={require('../../assets/activities/healthSelect.png')}
                       />
                     }
                   </TouchableOpacity>
@@ -2221,12 +2221,12 @@ export default class Main extends Component {
                     {this.state.activitySelected[5] == 0 ?
                       <Image
                         style={styles.face}
-                        source={require('../assets/activities/hobbies.png')}
+                        source={require('../../assets/activities/hobbies.png')}
                       />
                     :
                       <Image
                         style={styles.face}
-                        source={require('../assets/activities/hobbiesSelect.png')}
+                        source={require('../../assets/activities/hobbiesSelect.png')}
                       />
                     }
                   </TouchableOpacity>
@@ -2241,12 +2241,12 @@ export default class Main extends Component {
                     {this.state.activitySelected[6] == 0 ?
                       <Image
                         style={styles.face}
-                        source={require('../assets/activities/location.png')}
+                        source={require('../../assets/activities/location.png')}
                       />
                     :
                       <Image
                         style={styles.face}
-                        source={require('../assets/activities/locationSelect.png')}
+                        source={require('../../assets/activities/locationSelect.png')}
                       />
                     }
                   </TouchableOpacity>
@@ -2259,12 +2259,12 @@ export default class Main extends Component {
                     {this.state.activitySelected[7] == 0 ?
                       <Image
                         style={styles.face}
-                        source={require('../assets/activities/relationships.png')}
+                        source={require('../../assets/activities/relationships.png')}
                       />
                     :
                       <Image
                         style={styles.face}
-                        source={require('../assets/activities/relationshipsSelect.png')}
+                        source={require('../../assets/activities/relationshipsSelect.png')}
                       />
                     }
                   </TouchableOpacity>
@@ -2279,12 +2279,12 @@ export default class Main extends Component {
                     {this.state.activitySelected[8] == 0 ?
                       <Image
                         style={styles.face}
-                        source={require('../assets/activities/sleep.png')}
+                        source={require('../../assets/activities/sleep.png')}
                       />
                     :
                       <Image
                         style={styles.face}
-                        source={require('../assets/activities/sleepSelect.png')}
+                        source={require('../../assets/activities/sleepSelect.png')}
                       />
                     }
                   </TouchableOpacity>
@@ -2297,12 +2297,12 @@ export default class Main extends Component {
                     {this.state.activitySelected[9] == 0 ?
                       <Image
                         style={styles.face}
-                        source={require('../assets/activities/work.png')}
+                        source={require('../../assets/activities/work.png')}
                       />
                     :
                       <Image
                         style={styles.face}
-                        source={require('../assets/activities/workSelect.png')}
+                        source={require('../../assets/activities/workSelect.png')}
                       />
                     }
                   </TouchableOpacity>
@@ -2414,7 +2414,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     justifyContent: 'center',
     padding: 10,
-    fontFamily: Fonts.NotoSerifKR,
   },
   wordCol: {
     flex: 1,
