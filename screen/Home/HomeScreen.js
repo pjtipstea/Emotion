@@ -18,6 +18,7 @@ export default class HomeScreen extends Component {
       <ScrollView style={styles.container}>
         <TouchableOpacity
           style={styles.box}
+          onPress={() => this.props.navigation.navigate('Main')}
         >
           <View style={styles.boxHeader}>
             <Text style={styles.headerText}>

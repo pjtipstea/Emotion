@@ -6,10 +6,6 @@ import { AntDesign, SimpleLineIcons, Entypo, MaterialCommunityIcons } from '@exp
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
 
-import HomeScreen from './HomeScreen';
-import InsightsScreen from './InsightsScreen';
-import MonitorScreen from './MonitorScreen';
-import EntriesScreen from './EntriesScreen';
 import { HeaderTitle } from '@react-navigation/stack';
 import HomeStack from '../Home/HomeStack';
 import InsightsStack from '../Insights/InsightsStack';
