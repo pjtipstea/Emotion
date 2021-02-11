@@ -34,7 +34,8 @@ export default function InsightsStackScreen({ navigation, route }) {
             ),
             headerLeft: null,
             headerTintColor: '#000',
-            headerTitleStyle: {fontSize:30}
+            headerTitleStyle: {fontSize:30},
+            headerShown: false
           }}
         >
           <InsightsStack.Screen name='Insights' component={InsightsScreen} />

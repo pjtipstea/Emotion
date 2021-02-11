@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "Scribble",
-    "slug": "Scribble",
+    "name": "Piece of mind",
+    "slug": "Piece_of_mind",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/app_icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/start_screen.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,14 +17,22 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier" : "com.blackgarlic.pieceofmind",
+      "config" : {
+        "googleSignIn" : {
+          "reservedClientId" : "com.googleusercontent.apps.591844925241-fn9okvjoohiabq2ad6kqoc2pavmbbo34"
+        }
+      },
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/app_icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.blackgarlic.Scribble"
+      "package": "com.blackgarlic.pieceofmind",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"

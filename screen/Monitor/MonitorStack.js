@@ -35,7 +35,8 @@ export default function MonitorStackScreen({ navigation, route }) {
             ),
             headerLeft: null,
             headerTintColor: '#000',
-            headerTitleStyle: {fontSize:30}
+            headerTitleStyle: {fontSize:30},
+            headerShown: false
           }}
         >
           <MonitorStack.Screen name='Monitor' component={MonitorScreen} />

@@ -34,7 +34,8 @@ export default function EntriesStackScreen({ navigation, route }) {
             ),
             headerLeft: null,
             headerTintColor: '#000',
-            headerTitleStyle: {fontSize:30}
+            headerTitleStyle: {fontSize:30},
+            headerShown: false
           }}
         >
           <EntriesStack.Screen name='Entries' component={EntriesScreen} />

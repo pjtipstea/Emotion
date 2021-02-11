@@ -1,18 +1,127 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, Dimensions, Linking } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
 
 export default class InsightsScreen extends Component {
 
   constructor(props) {
     super(props);
     console.log("[ InsightsScreen.js ]");
+    
+    this.state = {
+      text: this.setText(),
+    }
+  }
+  
+  componentDidUpdate() {
+    if (this.props.route.params?.set) {
+      if (this.props.route.params.set) {
+        this.props.route.params.set = false;
+        this.setState({ text : this.setText() })
+      }
+    }
+  }
+  
+  setText() {
+    if (global.language == "Kor") {
+      return [
+        "피드백 작성",
+        "버그 신고",
+        "추가 기능 요청",
+      ]
+    } else {
+      return [
+        "Give feedback",
+        "Report bugs",
+        "Request features",
+      ]
+    }
   }
 
-  state = {
-    name: "",
+  openLink(type) {
+    var url;
+
+    if (type == 'feedback') {
+      url = 'https://forms.gle/ngnMAEDJmGsLySgS7';
+    } else if (type == 'report') {
+      url = 'https://forms.gle/N4tu3Pp3uYZw5LSN7';
+    } else if (type == 'request') {
+      url = 'https://forms.gle/qpQpPVnQVLheUrda7';
+    }
+
+    Linking.openURL(url);
   }
 
   render() {
+    return (
+      <View style={styles.container}>
+        <LinearGradient
+          // Background Linear Gradient
+          colors={['rgba(24, 0, 169, 0.15)', 'rgba(111, 230, 255, 0.15)', 'rgba(218, 218, 218, 0.15)',]}
+          style={styles.background}
+        >
+          <View
+            style={styles.header}
+          >
+            <Text style={global.language == "Kor" ? styles.headerTitleKor : styles.headerTitleEng}>Insights</Text>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('Setting', { params: { set: true } })}
+              style={styles.rightIconContainer}>
+              <Ionicons
+                name='md-person'
+                size={30}
+                style={{ marginBottom: -3, }}
+                color={'#000'}
+              />
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.subTitle}>Coming soon...</Text>
+          <View style={styles.box} >
+            <View style={styles.boxHeader}>
+              <Text style={styles.headerText}>
+                Give feedback
+              </Text>
+            </View>
+            <View style={styles.boxContent}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => this.openLink('feedback')}
+              >
+                <View style={styles.blankSpace} />
+                <Text style={global.language == "Kor" ? styles.buttonTextKor : styles.buttonTextEng}>
+                  {this.state.text[0]}
+                </Text>
+                <View style={styles.blankSpace} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => this.openLink('report')}
+              >
+                <View style={styles.blankSpace} />
+                <Text style={global.language == "Kor" ? styles.buttonTextKor : styles.buttonTextEng}>
+                  {this.state.text[1]}
+                </Text>
+                <View style={styles.blankSpace} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => this.openLink('request')}
+              >
+                <View style={styles.blankSpace} />
+                <Text style={global.language == "Kor" ? styles.buttonTextKor : styles.buttonTextEng}>
+                  {this.state.text[2]}
+                </Text>
+                <View style={styles.blankSpace} />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{flex: 7}}/>
+        </LinearGradient>
+      </View>
+    )
+
+
     return (
       <ScrollView style={styles.container}>
         <TouchableOpacity
@@ -50,35 +159,95 @@ export default class InsightsScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#DDD',
+    justifyContent: 'center',
+  },
+  blankSpace: {
+    flex: 1,
+  },
+  background: {
+    flex: 1,
+    padding: 10,
+  },
+  header: {
+    height: Dimensions.get('window').height * 0.1,
+    flexDirection: 'row',
+    padding: 10,
+    paddingTop: 15,
+    alignItems: 'center',
+  },
+  headerTitleEng: {
+    width: Dimensions.get('window').width - 70,
+    fontSize: 36,
+    fontWeight: 'bold',
+    fontFamily:'Visby',
+  },
+  headerTitleKor: {
+    width: Dimensions.get('window').width - 70,
+    fontSize: 36,
+    fontWeight: 'bold',
+    fontFamily:'Jua',
+  },
+  rightIconContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  subTitle: {
+    marginHorizontal: 10,
+    marginVertical: 5,
+    fontSize: 20,
+    fontWeight: 'bold',
+    fontFamily:'HelveticaM',
   },
   box: {
-    flex: 1,
-    backgroundColor: '#FFF',
+    flex: 5,
+    backgroundColor:"#FFF",
     borderRadius: 20,
     marginTop: 5,
     marginBottom: 5,
     marginRight: 10,
     marginLeft: 10,
+    padding: 20,
   },
   boxHeader: {
-    margin: 20,
-    paddingLeft: 5,
-    paddingBottom: 15,
+    flex: 3,
+    paddingHorizontal: 5,
+    borderColor: '#DDD',
     borderBottomWidth: 1,
-    borderColor:'#DDD',
   },
   headerText: {
+    flex: 1,
     textAlign: 'left',
+    textAlignVertical: 'center',
+    fontSize: 18,
+    color: '#000',
+    fontFamily:'HelveticaM',
   },
   boxContent: {
-    padding: 50,
-    width: Dimensions.get('window').width - 20,
-    height: Dimensions.get('window').width - 20,
+    flex: 21,
+    borderColor: '#FFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 10,
   },
-  contentCircle: {
+  button: {
     flex: 1,
-    backgroundColor: '#90CAF9',
-    borderRadius: (Dimensions.get('window').width - 20) / 2,
+    width: '90%',
+    borderRadius: 50,
+    backgroundColor: '#ADC6D1',
+    marginVertical: 7,
+  },
+  buttonTextEng: {
+    color: '#FFF',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    fontSize: 18,
+    fontFamily:'HelveticaM',
+  },
+  buttonTextKor: {
+    color: '#FFF',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    fontSize: 18,
+    fontFamily:'NotoM',
   },
 });

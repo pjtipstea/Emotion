@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "591844925241",
+    "project_id": "piece-of-mind-197bf",
+    "storage_bucket": "piece-of-mind-197bf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:591844925241:android:280051c312e0d1665112e8",
+        "android_client_info": {
+          "package_name": "com.blackgarlic.pieceofmind"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "591844925241-mcrr2oj48bd7ma87bhr8qh4i1hb3m2mn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.blackgarlic.pieceofmind",
+            "certificate_hash": "d610eccbc535b121b1540ea3f3a7dd5bac8255e4"
+          }
+        },
+        {
+          "client_id": "591844925241-c7l4i6seq6hdiod29jk69r91i2qma8tp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVuXlffrfxqMnhS1LPEW7r-DEdsfERIR0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "591844925241-c7l4i6seq6hdiod29jk69r91i2qma8tp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "591844925241-fn9okvjoohiabq2ad6kqoc2pavmbbo34.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.blackgarlic.pieceofmind"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

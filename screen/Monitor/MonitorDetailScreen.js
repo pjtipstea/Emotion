@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, Dimens
 import { LineChart, Grid, XAxis, YAxis } from 'react-native-svg-charts'
 import { G, Line } from 'react-native-svg'
 import * as shape from 'd3-shape'
+import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
 
 export default class MonitorDetailScreen extends Component {
 
@@ -178,6 +180,26 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#DDD',
+  },
+  background: {
+    flex: 1,
+    padding: 10,
+  },
+  header: {
+    height: Dimensions.get('window').height * 0.1,
+    flexDirection: 'row',
+    padding: 10,
+    paddingTop: 15,
+    alignItems: 'center',
+  },
+  headerTitle: {
+    width: Dimensions.get('window').width - 70,
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  rightIconContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
   },
   box: {
     flex: 1,
