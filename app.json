@@ -24,7 +24,8 @@
           "reservedClientId" : "com.googleusercontent.apps.591844925241-fn9okvjoohiabq2ad6kqoc2pavmbbo34"
         }
       },
-      "googleServicesFile": "./GoogleService-Info.plist"
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
@@ -32,6 +33,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.blackgarlic.pieceofmind",
+      "versionCode": 1,
       "googleServicesFile": "./google-services.json"
     },
     "web": {
