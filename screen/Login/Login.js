@@ -206,8 +206,11 @@ export default class Login extends Component {
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
-                //this.props.navigation.navigate('Menu')
-                this.signInAsync();
+                global.mail = "hnsamuel1226@gmail.com"
+                this.props.navigation.navigate('Menu')
+
+
+                //this.signInAsync();
               }}
             >
               <ImageBackground

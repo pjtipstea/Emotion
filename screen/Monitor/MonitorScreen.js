@@ -273,19 +273,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  blankSpace: {
-    flex: 1,
-  },
   background: {
     flex: 1,
     padding: 10,
   },
+  blankSpace: {
+    flex: 1,
+  },
   header: {
-    height: Dimensions.get('window').height * 0.1,
+    height: Dimensions.get('window').height * 0.12,
     flexDirection: 'row',
     padding: 10,
     paddingTop: 15,
-    alignItems: 'center',
+    alignItems: 'flex-end',
   },
   headerTitleEng: {
     width: Dimensions.get('window').width - 70,
@@ -305,9 +305,8 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     marginHorizontal: 10,
-    marginVertical: 5,
-    fontSize: 20,
-    fontWeight: 'bold',
+    marginVertical: 25,
+    fontSize: 24,
     fontFamily:'HelveticaM',
   },
   box: {

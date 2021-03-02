@@ -33,7 +33,7 @@ export default class Main extends Component {
       userId: "",
       userDay: 0,
       necessaryCount: 0,
-      mail: "test",
+      mail: global.mail,
       categoryList: [
         [
           { id: "es001", sequence: 0 },
@@ -1412,7 +1412,7 @@ export default class Main extends Component {
       })
   }
 
-  sendDataToServer() {
+  async sendDataToServer() {
     const url = 'http://yooyu852.dothome.co.kr/scribble/addData.php'
 
     let data = {
@@ -1424,6 +1424,8 @@ export default class Main extends Component {
       userId: this.state.userId,
       userDay: this.state.userDay,
     }
+
+    console.log(data);
 
     try {
       fetch(url, {
@@ -1656,7 +1658,7 @@ export default class Main extends Component {
 
       // Calculate similarity
       tmp.map((item) => {
-        if (item.frequency >= 0 && item.frequency < 3) {
+        if (item.frequency == 0) {
           var flag = true;
 
           for (var i = 0; i < index.length; i++) {
@@ -2221,28 +2223,28 @@ export default class Main extends Component {
             {this.state.wordSelected[i] == -1 &&
               <View style={styles.wordOutLong}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.wordSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.wordSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.wordSelected[i] == 0 &&
               <View style={styles.wordOut}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordText}>{this.state.wordSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextKor : styles.wordTextEng}>{this.state.wordSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.wordSelected[i] == 1 &&
               <View style={styles.wordOutSingle}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.wordSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.wordSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.wordSelected[i] == 2 &&
               <View style={styles.wordOutDouble}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.wordSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.wordSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
@@ -2264,28 +2266,28 @@ export default class Main extends Component {
             {this.state.wordSelected[i] == -1 &&
               <View style={styles.wordOutLong}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.wordSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.wordSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.wordSelected[i] == 0 &&
               <View style={styles.wordOut}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordText}>{this.state.wordSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextKor : styles.wordTextEng}>{this.state.wordSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.wordSelected[i] == 1 &&
               <View style={styles.wordOutSingle}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.wordSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.wordSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.wordSelected[i] == 2 &&
               <View style={styles.wordOutDouble}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.wordSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.wordSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
@@ -2307,28 +2309,28 @@ export default class Main extends Component {
             {this.state.wordSelected[i] == -1 &&
               <View style={styles.wordCenterLong}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.wordSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.wordSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.wordSelected[i] == 0 &&
               <View style={styles.wordCenter}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordText}>{this.state.wordSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextKor : styles.wordTextEng}>{this.state.wordSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.wordSelected[i] == 1 &&
               <View style={styles.wordCenterSingle}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.wordSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.wordSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.wordSelected[i] == 2 &&
               <View style={styles.wordCenterDouble}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.wordSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.wordSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
@@ -2350,28 +2352,28 @@ export default class Main extends Component {
             {this.state.wordSelected[i] == -1 &&
               <View style={styles.wordOutLong}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.wordSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.wordSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.wordSelected[i] == 0 &&
               <View style={styles.wordOut}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordText}>{this.state.wordSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextKor : styles.wordTextEng}>{this.state.wordSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.wordSelected[i] == 1 &&
               <View style={styles.wordOutSingle}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.wordSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.wordSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.wordSelected[i] == 2 &&
               <View style={styles.wordOutDouble}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.wordSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.wordSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
@@ -2393,28 +2395,28 @@ export default class Main extends Component {
             {this.state.wordSelected[i] == -1 &&
               <View style={styles.wordCenterLong}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.wordSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.wordSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.wordSelected[i] == 0 &&
               <View style={styles.wordCenter}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordText}>{this.state.wordSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextKor : styles.wordTextEng}>{this.state.wordSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.wordSelected[i] == 1 &&
               <View style={styles.wordCenterSingle}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.wordSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.wordSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.wordSelected[i] == 2 &&
               <View style={styles.wordCenterDouble}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.wordSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.wordSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
@@ -2436,28 +2438,28 @@ export default class Main extends Component {
             {this.state.wordSelected[i] == -1 &&
               <View style={styles.wordOutLong}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.wordSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.wordSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.wordSelected[i] == 0 &&
               <View style={styles.wordOut}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordText}>{this.state.wordSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextKor : styles.wordTextEng}>{this.state.wordSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.wordSelected[i] == 1 &&
               <View style={styles.wordOutSingle}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.wordSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.wordSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.wordSelected[i] == 2 &&
               <View style={styles.wordOutDouble}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.wordSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.wordSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
@@ -2483,28 +2485,28 @@ export default class Main extends Component {
             {this.state.stateSelected[i] == -1 &&
               <View style={styles.stateLong}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.stateSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.stateSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.stateSelected[i] == 0 &&
               <View style={styles.state}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordText}>{this.state.stateSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextKor : styles.wordTextEng}>{this.state.stateSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.stateSelected[i] == 1 &&
               <View style={styles.stateSingle}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.stateSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.stateSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.stateSelected[i] == 2 &&
               <View style={styles.stateDouble}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.stateSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.stateSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
@@ -2526,28 +2528,28 @@ export default class Main extends Component {
             {this.state.stateSelected[i] == -1 &&
               <View style={styles.stateLong}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.stateSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.stateSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.stateSelected[i] == 0 &&
               <View style={styles.state}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordText}>{this.state.stateSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextKor : styles.wordTextEng}>{this.state.stateSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.stateSelected[i] == 1 &&
               <View style={styles.stateSingle}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.stateSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.stateSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.stateSelected[i] == 2 &&
               <View style={styles.stateDouble}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.stateSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.stateSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
@@ -2569,28 +2571,28 @@ export default class Main extends Component {
             {this.state.stateSelected[i] == -1 &&
               <View style={styles.stateLong}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.stateSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.stateSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.stateSelected[i] == 0 &&
               <View style={styles.state}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordText}>{this.state.stateSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextKor : styles.wordTextEng}>{this.state.stateSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.stateSelected[i] == 1 &&
               <View style={styles.stateSingle}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.stateSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.stateSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.stateSelected[i] == 2 &&
               <View style={styles.stateDouble}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.stateSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.stateSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
@@ -2612,28 +2614,28 @@ export default class Main extends Component {
             {this.state.stateSelected[i] == -1 &&
               <View style={styles.stateLong}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.stateSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.stateSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.stateSelected[i] == 0 &&
               <View style={styles.state}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordText}>{this.state.stateSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextKor : styles.wordTextEng}>{this.state.stateSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.stateSelected[i] == 1 &&
               <View style={styles.stateSingle}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.stateSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.stateSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
             {this.state.stateSelected[i] == 2 &&
               <View style={styles.stateDouble}>
                 <View style={styles.wordBlank} />
-                <Text style={styles.wordTextSelected}>{this.state.stateSpace[i][0]}</Text>
+                <Text style={global.language == "Kor" ? styles.wordTextSelectedKor : styles.wordTextSelectedEng}>{this.state.stateSpace[i][0]}</Text>
                 <View style={styles.wordBlank} />
               </View>
             }
@@ -2648,52 +2650,81 @@ export default class Main extends Component {
     var activity = [];
     var content = [];
 
-    for (var i = 0; i < 8; i++) {
-      if (select[i] == 1) {
-        content.push('');
-        switch (i) {
-          case 0:
-            activity.push('relationship');
-            break;
-          case 1:
-            activity.push('sleep');
-            break;
-          case 2:
-            activity.push('hobbies');
-            break;
-          case 3:
-            activity.push('work');
-            break;
-          case 4:
-            activity.push('finances');
-            break;
-          case 5:
-            activity.push('love');
-            break;
-          case 6:
-            activity.push('exercise');
-            break;
-          case 7:
-            activity.push('health');
-            break;
+    if (this.state.activityNext == 0) {
+      content.push('');
+      activity.push('Other');
+    } else {
+      for (var i = 0; i < 8; i++) {
+        if (select[i] == 1) {
+          content.push('');
+          switch (i) {
+            case 0:
+              activity.push('relationship');
+              break;
+            case 1:
+              activity.push('sleep');
+              break;
+            case 2:
+              activity.push('hobby');
+              break;
+            case 3:
+              activity.push('work');
+              break;
+            case 4:
+              activity.push('finances');
+              break;
+            case 5:
+              activity.push('family');
+              break;
+            case 6:
+              activity.push('exercise');
+              break;
+            case 7:
+              activity.push('health');
+              break;
+          }
         }
       }
     }
+    
     this.setState({ activity: activity, content: content })
   }
 
   createExerciseDetail() {
-    return (
-      <ScrollView
-        style={styles.exerciseScroll}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-      >
-        {this.state.activity.map((l, i) => (
-          this.createDetailInput(l, i)
-        ))}
-      </ScrollView>
-    )
+    if (this.state.activityNext == 0) {
+      return (
+        <ScrollView
+          style={styles.exerciseScroll}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+        >
+          <View style={styles.exerciseEmptyBox}>
+            <TextInput
+              style={styles.exerciseEmptyInput}
+              onChangeText={(text) => {
+                var content = this.state.content;
+                content[0] = text;
+                this.setState({ content: content })
+              }}
+              placeholder={'Start Writing'}
+              multiline={true}
+            />
+          </View>
+        </ScrollView>
+      )
+    } else {
+      return (
+        <ScrollView
+          style={styles.exerciseScroll}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+        >
+          {this.state.activity.map((l, i) => (
+            this.createDetailInput(l, i)
+          ))}
+        </ScrollView>
+      )  
+    }
   }
 
   createDetailInput(l, i) {
@@ -2715,64 +2746,126 @@ export default class Main extends Component {
   }
 
   getActivity(l) {
-    switch (l) {
-      case 'relationship':
-        return (
-          <ImageBackground
-            style={styles.exerciseImage}
-            source={require('../../assets/activities/relationship.png')}
-          />
-        )
-      case 'sleep':
-        return (
-          <ImageBackground
-            style={styles.exerciseImage}
-            source={require('../../assets/activities/sleep.png')}
-          />
-        )
-      case 'hobbies':
-        return (
-          <ImageBackground
-            style={styles.exerciseImage}
-            source={require('../../assets/activities/hobbies.png')}
-          />
-        )
-      case 'work':
-        return (
-          <ImageBackground
-            style={styles.exerciseImage}
-            source={require('../../assets/activities/work.png')}
-          />
-        )
-      case 'finances':
-        return (
-          <ImageBackground
-            style={styles.exerciseImage}
-            source={require('../../assets/activities/finances.png')}
-          />
-        )
-      case 'love':
-        return (
-          <ImageBackground
-            style={styles.exerciseImage}
-            source={require('../../assets/activities/love.png')}
-          />
-        )
-      case 'exercise':
-        return (
-          <ImageBackground
-            style={styles.exerciseImage}
-            source={require('../../assets/activities/exercise.png')}
-          />
-        )
-      case 'health':
-        return (
-          <ImageBackground
-            style={styles.exerciseImage}
-            source={require('../../assets/activities/health.png')}
-          />
-        )
+    if (global.language == "Kor") {
+      switch (l) {
+        case 'relationship':
+          return (
+            <ImageBackground
+              style={styles.exerciseImage}
+              source={require('../../assets/activities/Kor/relationship.png')}
+            />
+          )
+        case 'sleep':
+          return (
+            <ImageBackground
+              style={styles.exerciseImage}
+              source={require('../../assets/activities/Kor/sleep.png')}
+            />
+          )
+        case 'hobby':
+          return (
+            <ImageBackground
+              style={styles.exerciseImage}
+              source={require('../../assets/activities/Kor/hobby.png')}
+            />
+          )
+        case 'work':
+          return (
+            <ImageBackground
+              style={styles.exerciseImage}
+              source={require('../../assets/activities/Kor/work.png')}
+            />
+          )
+        case 'finances':
+          return (
+            <ImageBackground
+              style={styles.exerciseImage}
+              source={require('../../assets/activities/Kor/finances.png')}
+            />
+          )
+        case 'family':
+          return (
+            <ImageBackground
+              style={styles.exerciseImage}
+              source={require('../../assets/activities/Kor/family.png')}
+            />
+          )
+        case 'exercise':
+          return (
+            <ImageBackground
+              style={styles.exerciseImage}
+              source={require('../../assets/activities/Kor/exercise.png')}
+            />
+          )
+        case 'health':
+          return (
+            <ImageBackground
+              style={styles.exerciseImage}
+              source={require('../../assets/activities/Kor/health.png')}
+            />
+          )
+      }
+    } else {
+      switch (l) {
+        case 'relationship':
+          return (
+            <ImageBackground
+              style={styles.exerciseImage}
+              source={require('../../assets/activities/Eng/relationship.png')}
+            />
+          )
+        case 'sleep':
+          return (
+            <ImageBackground
+              style={styles.exerciseImage}
+              source={require('../../assets/activities/Eng/sleep.png')}
+            />
+          )
+        case 'hobby':
+          return (
+            <ImageBackground
+              style={styles.exerciseImage}
+              source={require('../../assets/activities/Eng/hobby.png')}
+            />
+          )
+        case 'work':
+          return (
+            <ImageBackground
+              style={styles.exerciseImage}
+              source={require('../../assets/activities/Eng/work.png')}
+            />
+          )
+        case 'finances':
+          return (
+            <ImageBackground
+              style={styles.exerciseImage}
+              source={require('../../assets/activities/Eng/finances.png')}
+            />
+          )
+        case 'family':
+          return (
+            <ImageBackground
+              style={styles.exerciseImage}
+              source={require('../../assets/activities/Eng/family.png')}
+            />
+          )
+        case 'exercise':
+          return (
+            <ImageBackground
+              style={styles.exerciseImage}
+              source={require('../../assets/activities/Eng/exercise.png')}
+            />
+          )
+        case 'health':
+          return (
+            <ImageBackground
+              style={styles.exerciseImage}
+              source={require('../../assets/activities/Eng/health.png')}
+            />
+          )
+      }
     }
+    
   }
 
   createButtons(type) {
@@ -2796,7 +2889,7 @@ export default class Main extends Component {
                 >
                   <View style={styles.wordCenter}>
                     <View style={styles.wordBlank} />
-                    <Text style={styles.wordText}>{this.state.wordSpace[0]}</Text>
+                    <Text style={global.language == "Kor" ? styles.wordTextKor : styles.wordTextEng}>{this.state.wordSpace[0]}</Text>
                     <View style={styles.wordBlank} />
                   </View>
                 </TouchableOpacity>
@@ -2804,7 +2897,11 @@ export default class Main extends Component {
                 <View style={styles.wordSpace}>
                   <View style={this.state.wordSelected[0] == 0 ? styles.wordCenter : styles.wordCenterSingle}>
                     <View style={styles.wordBlank} />
-                    <Text style={this.state.wordSelected[0] == 0 ? styles.wordText : styles.wordTextSelected}>{this.state.wordSpace[0]}</Text>
+                    {global.language == "Kor" ?
+                      <Text style={this.state.wordSelected[0] == 0 ? styles.wordTextKor : styles.wordTextSelectedKor}>{this.state.wordSpace[0]}</Text>
+                      :
+                      <Text style={this.state.wordSelected[0] == 0 ? styles.wordTextEng : styles.wordTextSelectedEng}>{this.state.wordSpace[0]}</Text>
+                    }
                     <View style={styles.wordBlank} />
                   </View>
                 </View>
@@ -2828,7 +2925,7 @@ export default class Main extends Component {
                 >
                   <View style={styles.wordCenter}>
                     <View style={styles.wordBlank} />
-                    <Text style={styles.wordText}>{this.state.wordSpace[1]}</Text>
+                    <Text style={global.language == "Kor" ? styles.wordTextKor : styles.wordTextEng}>{this.state.wordSpace[1]}</Text>
                     <View style={styles.wordBlank} />
                   </View>
                 </TouchableOpacity>
@@ -2836,7 +2933,11 @@ export default class Main extends Component {
                 <View style={styles.wordSpace}>
                   <View style={this.state.wordSelected[1] == 0 ? styles.wordCenter : styles.wordCenterSingle}>
                     <View style={styles.wordBlank} />
-                    <Text style={this.state.wordSelected[0] == 0 ? styles.wordText : styles.wordTextSelected}>{this.state.wordSpace[1]}</Text>
+                    {global.language == "Kor" ?
+                      <Text style={this.state.wordSelected[0] == 0 ? styles.wordTextKor : styles.wordTextSelectedKor}>{this.state.wordSpace[1]}</Text>
+                      :
+                      <Text style={this.state.wordSelected[0] == 0 ? styles.wordTextEng : styles.wordTextSelectedEng}>{this.state.wordSpace[1]}</Text>
+                    }
                     <View style={styles.wordBlank} />
                   </View>
                 </View>
@@ -2858,7 +2959,7 @@ export default class Main extends Component {
                 >
                   <View style={styles.wordCenter}>
                     <View style={styles.wordBlank} />
-                    <Text style={styles.wordText}>{this.state.wordSpace[2]}</Text>
+                    <Text style={global.language == "Kor" ? styles.wordTextKor : styles.wordTextEng}>{this.state.wordSpace[2]}</Text>
                     <View style={styles.wordBlank} />
                   </View>
                 </TouchableOpacity>
@@ -2866,7 +2967,11 @@ export default class Main extends Component {
                 <View style={styles.wordSpace}>
                   <View style={this.state.wordSelected[2] == 0 ? styles.wordCenter : styles.wordCenterSingle}>
                     <View style={styles.wordBlank} />
-                    <Text style={this.state.wordSelected[0] == 0 ? styles.wordText : styles.wordTextSelected}>{this.state.wordSpace[2]}</Text>
+                    {global.language == "Kor" ?
+                      <Text style={this.state.wordSelected[0] == 0 ? styles.wordTextKor : styles.wordTextSelectedKor}>{this.state.wordSpace[2]}</Text>
+                      :
+                      <Text style={this.state.wordSelected[0] == 0 ? styles.wordTextEng : styles.wordTextSelectedEng}>{this.state.wordSpace[2]}</Text>
+                    }
                     <View style={styles.wordBlank} />
                   </View>
                 </View>
@@ -2891,7 +2996,7 @@ export default class Main extends Component {
                 >
                   <View style={styles.wordCenter}>
                     <View style={styles.wordBlank} />
-                    <Text style={styles.wordText}>{this.state.wordSpace[3]}</Text>
+                    <Text style={global.language == "Kor" ? styles.wordTextKor : styles.wordTextEng}>{this.state.wordSpace[3]}</Text>
                     <View style={styles.wordBlank} />
                   </View>
                 </TouchableOpacity>
@@ -2899,7 +3004,11 @@ export default class Main extends Component {
                 <View style={styles.wordSpace}>
                   <View style={this.state.wordSelected[3] == 0 ? styles.wordCenter : styles.wordCenterSingle}>
                     <View style={styles.wordBlank} />
-                    <Text style={this.state.wordSelected[0] == 0 ? styles.wordText : styles.wordTextSelected}>{this.state.wordSpace[3]}</Text>
+                    {global.language == "Kor" ?
+                      <Text style={this.state.wordSelected[0] == 0 ? styles.wordTextKor : styles.wordTextSelectedKor}>{this.state.wordSpace[3]}</Text>
+                      :
+                      <Text style={this.state.wordSelected[0] == 0 ? styles.wordTextEng : styles.wordTextSelectedEng}>{this.state.wordSpace[3]}</Text>
+                    }
                     <View style={styles.wordBlank} />
                   </View>
                 </View>
@@ -2921,7 +3030,7 @@ export default class Main extends Component {
                 >
                   <View style={styles.wordCenter}>
                     <View style={styles.wordBlank} />
-                    <Text style={styles.wordText}>{this.state.wordSpace[4]}</Text>
+                    <Text style={global.language == "Kor" ? styles.wordTextKor : styles.wordTextEng}>{this.state.wordSpace[4]}</Text>
                     <View style={styles.wordBlank} />
                   </View>
                 </TouchableOpacity>
@@ -2929,7 +3038,11 @@ export default class Main extends Component {
                 <View style={styles.wordSpace}>
                   <View style={this.state.wordSelected[4] == 0 ? styles.wordCenter : styles.wordCenterSingle}>
                     <View style={styles.wordBlank} />
-                    <Text style={this.state.wordSelected[0] == 0 ? styles.wordText : styles.wordTextSelected}>{this.state.wordSpace[4]}</Text>
+                    {global.language == "Kor" ?
+                      <Text style={this.state.wordSelected[0] == 0 ? styles.wordTextKor : styles.wordTextSelectedKor}>{this.state.wordSpace[4]}</Text>
+                      :
+                      <Text style={this.state.wordSelected[0] == 0 ? styles.wordTextEng : styles.wordTextSelectedEng}>{this.state.wordSpace[4]}</Text>
+                    }
                     <View style={styles.wordBlank} />
                   </View>
                 </View>
@@ -2989,7 +3102,7 @@ export default class Main extends Component {
           </View>
         </View>
       )
-    } else if (type == 'exercise') {
+    } else if (type == 'exercise' && global.language == "Kor") {
       return (
         <View style={styles.wordBody}>
           <View style={styles.wordCol}>
@@ -3002,12 +3115,12 @@ export default class Main extends Component {
                 {this.state.activitySelected[0] == 0 ?
                   <Image
                     style={styles.face}
-                    source={require('../../assets/activities/relationship.png')}
+                    source={require('../../assets/activities/Kor/relationship.png')}
                   />
                   :
                   <Image
                     style={styles.face}
-                    source={require('../../assets/activities/relationshipSelect.png')}
+                    source={require('../../assets/activities/Kor/relationshipSelect.png')}
                   />
                 }
               </TouchableOpacity>
@@ -3021,12 +3134,12 @@ export default class Main extends Component {
                 {this.state.activitySelected[1] == 0 ?
                   <Image
                     style={styles.face}
-                    source={require('../../assets/activities/sleep.png')}
+                    source={require('../../assets/activities/Kor/sleep.png')}
                   />
                   :
                   <Image
                     style={styles.face}
-                    source={require('../../assets/activities/sleepSelect.png')}
+                    source={require('../../assets/activities/Kor/sleepSelect.png')}
                   />
                 }
               </TouchableOpacity>
@@ -3042,12 +3155,12 @@ export default class Main extends Component {
                 {this.state.activitySelected[2] == 0 ?
                   <Image
                     style={styles.face}
-                    source={require('../../assets/activities/hobbies.png')}
+                    source={require('../../assets/activities/Kor/hobby.png')}
                   />
                   :
                   <Image
                     style={styles.face}
-                    source={require('../../assets/activities/hobbiesSelect.png')}
+                    source={require('../../assets/activities/Kor/hobbySelect.png')}
                   />
                 }
               </TouchableOpacity>
@@ -3061,12 +3174,12 @@ export default class Main extends Component {
                 {this.state.activitySelected[3] == 0 ?
                   <Image
                     style={styles.face}
-                    source={require('../../assets/activities/work.png')}
+                    source={require('../../assets/activities/Kor/work.png')}
                   />
                   :
                   <Image
                     style={styles.face}
-                    source={require('../../assets/activities/workSelect.png')}
+                    source={require('../../assets/activities/Kor/workSelect.png')}
                   />
                 }
               </TouchableOpacity>
@@ -3083,12 +3196,12 @@ export default class Main extends Component {
                 {this.state.activitySelected[4] == 0 ?
                   <Image
                     style={styles.face}
-                    source={require('../../assets/activities/finances.png')}
+                    source={require('../../assets/activities/Kor/finances.png')}
                   />
                   :
                   <Image
                     style={styles.face}
-                    source={require('../../assets/activities/financesSelect.png')}
+                    source={require('../../assets/activities/Kor/financesSelect.png')}
                   />
                 }
               </TouchableOpacity>
@@ -3102,12 +3215,12 @@ export default class Main extends Component {
                 {this.state.activitySelected[5] == 0 ?
                   <Image
                     style={styles.face}
-                    source={require('../../assets/activities/love.png')}
+                    source={require('../../assets/activities/Kor/family.png')}
                   />
                   :
                   <Image
                     style={styles.face}
-                    source={require('../../assets/activities/loveSelect.png')}
+                    source={require('../../assets/activities/Kor/familySelect.png')}
                   />
                 }
               </TouchableOpacity>
@@ -3123,12 +3236,12 @@ export default class Main extends Component {
                 {this.state.activitySelected[6] == 0 ?
                   <Image
                     style={styles.face}
-                    source={require('../../assets/activities/exercise.png')}
+                    source={require('../../assets/activities/Kor/exercise.png')}
                   />
                   :
                   <Image
                     style={styles.face}
-                    source={require('../../assets/activities/exerciseSelect.png')}
+                    source={require('../../assets/activities/Kor/exerciseSelect.png')}
                   />
                 }
               </TouchableOpacity>
@@ -3142,12 +3255,178 @@ export default class Main extends Component {
                 {this.state.activitySelected[7] == 0 ?
                   <Image
                     style={styles.face}
-                    source={require('../../assets/activities/health.png')}
+                    source={require('../../assets/activities/Kor/health.png')}
                   />
                   :
                   <Image
                     style={styles.face}
-                    source={require('../../assets/activities/healthSelect.png')}
+                    source={require('../../assets/activities/Kor/healthSelect.png')}
+                  />
+                }
+              </TouchableOpacity>
+            </Animated.View>
+          </View>
+        </View>
+      )
+    } else if (type == 'exercise') {
+      return (
+        <View style={styles.wordBody}>
+          <View style={styles.wordCol}>
+            <Animated.View style={{ opacity: this.state.fade[1], flex: 1, margin: 7, }}>
+              <TouchableOpacity
+                style={styles.wordSpace}
+                onPress={() => {
+                  this.toggleSelected('activity', 0)
+                }}>
+                {this.state.activitySelected[0] == 0 ?
+                  <Image
+                    style={styles.face}
+                    source={require('../../assets/activities/Eng/relationship.png')}
+                  />
+                  :
+                  <Image
+                    style={styles.face}
+                    source={require('../../assets/activities/Eng/relationshipSelect.png')}
+                  />
+                }
+              </TouchableOpacity>
+            </Animated.View>
+            <Animated.View style={{ opacity: this.state.fade[2], flex: 1, margin: 7, }}>
+              <TouchableOpacity
+                style={styles.wordSpace}
+                onPress={() => {
+                  this.toggleSelected('activity', 1)
+                }}>
+                {this.state.activitySelected[1] == 0 ?
+                  <Image
+                    style={styles.face}
+                    source={require('../../assets/activities/Eng/sleep.png')}
+                  />
+                  :
+                  <Image
+                    style={styles.face}
+                    source={require('../../assets/activities/Eng/sleepSelect.png')}
+                  />
+                }
+              </TouchableOpacity>
+            </Animated.View>
+          </View>
+          <View style={styles.wordCol}>
+            <Animated.View style={{ opacity: this.state.fade[2], flex: 1, margin: 7, }}>
+              <TouchableOpacity
+                style={styles.wordSpace}
+                onPress={() => {
+                  this.toggleSelected('activity', 2)
+                }}>
+                {this.state.activitySelected[2] == 0 ?
+                  <Image
+                    style={styles.face}
+                    source={require('../../assets/activities/Eng/hobby.png')}
+                  />
+                  :
+                  <Image
+                    style={styles.face}
+                    source={require('../../assets/activities/Eng/hobbySelect.png')}
+                  />
+                }
+              </TouchableOpacity>
+            </Animated.View>
+            <Animated.View style={{ opacity: this.state.fade[3], flex: 1, margin: 7, }}>
+              <TouchableOpacity
+                style={styles.wordSpace}
+                onPress={() => {
+                  this.toggleSelected('activity', 3)
+                }}>
+                {this.state.activitySelected[3] == 0 ?
+                  <Image
+                    style={styles.face}
+                    source={require('../../assets/activities/Eng/work.png')}
+                  />
+                  :
+                  <Image
+                    style={styles.face}
+                    source={require('../../assets/activities/Eng/workSelect.png')}
+                  />
+                }
+              </TouchableOpacity>
+            </Animated.View>
+
+          </View>
+          <View style={styles.wordCol}>
+            <Animated.View style={{ opacity: this.state.fade[3], flex: 1, margin: 7, }}>
+              <TouchableOpacity
+                style={styles.wordSpace}
+                onPress={() => {
+                  this.toggleSelected('activity', 4)
+                }}>
+                {this.state.activitySelected[4] == 0 ?
+                  <Image
+                    style={styles.face}
+                    source={require('../../assets/activities/Eng/finances.png')}
+                  />
+                  :
+                  <Image
+                    style={styles.face}
+                    source={require('../../assets/activities/Eng/financesSelect.png')}
+                  />
+                }
+              </TouchableOpacity>
+            </Animated.View>
+            <Animated.View style={{ opacity: this.state.fade[4], flex: 1, margin: 7, }}>
+              <TouchableOpacity
+                style={styles.wordSpace}
+                onPress={() => {
+                  this.toggleSelected('activity', 5)
+                }}>
+                {this.state.activitySelected[5] == 0 ?
+                  <Image
+                    style={styles.face}
+                    source={require('../../assets/activities/Eng/family.png')}
+                  />
+                  :
+                  <Image
+                    style={styles.face}
+                    source={require('../../assets/activities/Eng/familySelect.png')}
+                  />
+                }
+              </TouchableOpacity>
+            </Animated.View>
+          </View>
+          <View style={styles.wordCol}>
+            <Animated.View style={{ opacity: this.state.fade[4], flex: 1, margin: 7, }}>
+              <TouchableOpacity
+                style={styles.wordSpace}
+                onPress={() => {
+                  this.toggleSelected('activity', 6)
+                }}>
+                {this.state.activitySelected[6] == 0 ?
+                  <Image
+                    style={styles.face}
+                    source={require('../../assets/activities/Eng/exercise.png')}
+                  />
+                  :
+                  <Image
+                    style={styles.face}
+                    source={require('../../assets/activities/Eng/exerciseSelect.png')}
+                  />
+                }
+              </TouchableOpacity>
+            </Animated.View>
+            <Animated.View style={{ opacity: this.state.fade[5], flex: 1, margin: 7, }}>
+              <TouchableOpacity
+                style={styles.wordSpace}
+                onPress={() => {
+                  this.toggleSelected('activity', 7)
+                }}>
+                {this.state.activitySelected[7] == 0 ?
+                  <Image
+                    style={styles.face}
+                    source={require('../../assets/activities/Eng/health.png')}
+                  />
+                  :
+                  <Image
+                    style={styles.face}
+                    source={require('../../assets/activities/Eng/healthSelect.png')}
                   />
                 }
               </TouchableOpacity>
@@ -3160,9 +3439,11 @@ export default class Main extends Component {
 
   render() {
 
-    if (this.state.step == 12) {
+    if (this.state.step == 11) {
       this.sendDataToServer();
-      this.props.navigation.navigate('Menu', { screen: 'Home' })
+      setTimeout(function () {
+        this.props.navigation.navigate('Menu', { screen: 'Home' })
+      }.bind(this), 1000); 
     }
 
     if (this.state.load) {
@@ -3196,9 +3477,9 @@ export default class Main extends Component {
                   </View>
                   <Animated.View style={{ opacity: this.state.fade[0], flex: 9 }}>
                     {this.state.version == 'Eng' ?
-                      <Text style={styles.question}>How do you feel today?</Text>
+                      <Text style={styles.questionEng}>How do you feel today?</Text>
                       :
-                      <Text style={styles.question}>오늘은 기분이 어때요?</Text>
+                      <Text style={styles.questionKor}>오늘 어떤 마음들이 들었어요?</Text>
                     }
                   </Animated.View>
                 </View>
@@ -3231,9 +3512,9 @@ export default class Main extends Component {
                   </View>
                   <Animated.View style={{ opacity: this.state.fade[0], flex: 9 }}>
                     {this.state.version == 'Eng' ?
-                      <Text style={styles.question}>How do you feel today?</Text>
+                      <Text style={styles.questionEng}>How do you feel today?</Text>
                       :
-                      <Text style={styles.question}>오늘은 기분이 어때요?</Text>
+                      <Text style={styles.questionKor}>오늘 어떤 마음들이 들었어요?</Text>
                     }
                   </Animated.View>
                 </View>
@@ -3306,9 +3587,9 @@ export default class Main extends Component {
                   </View>
                   <Animated.View style={{ opacity: this.state.fade[0], flex: 9 }}>
                     {this.state.version == 'Eng' ?
-                      <Text style={styles.question}>How do you feel today?</Text>
+                      <Text style={styles.questionEng}>How do you feel today?</Text>
                       :
-                      <Text style={styles.question}>오늘은 기분이 어때요?</Text>
+                      <Text style={styles.questionKor}>오늘 나의 마음은 어때요?</Text>
                     }
                   </Animated.View>
                 </View>
@@ -3380,9 +3661,9 @@ export default class Main extends Component {
                   </View>
                   <Animated.View style={{ opacity: this.state.fade[0], flex: 9 }}>
                     {this.state.version == 'Eng' ?
-                      <Text style={styles.question}>What made you feel this way?</Text>
+                      <Text style={styles.questionEng}>What made you feel this way?</Text>
                       :
-                      <Text style={styles.question}>오늘 기억에 남는 일이 있었나요?</Text>
+                      <Text style={styles.questionKor}>오늘 기억에 남는 일이 있었나요?</Text>
                     }
                   </Animated.View>
                 </View>
@@ -3393,7 +3674,6 @@ export default class Main extends Component {
                   <Animated.View style={[styles.nextButton, { opacity: this.state.fade[0] }]}>
                     <TouchableOpacity
                       onPress={() => {
-                        this.setState({ activityNext: 0 });
                         this.createExerciseList();
                         this.fadeOut();
                         setTimeout(function () {
@@ -3436,9 +3716,9 @@ export default class Main extends Component {
                   </View>
                   <Animated.View style={{ opacity: this.state.fade[0], flex: 9 }}>
                     {this.state.version == 'Eng' ?
-                      <Text style={styles.question}>What made you feel this way?</Text>
+                      <Text style={styles.questionEng}>What made you feel this way?</Text>
                       :
-                      <Text style={styles.question}>오늘 기억에 남는 일이 있었나요?</Text>
+                      <Text style={styles.questionKor}>오늘 기억에 남는 일이 있었나요?</Text>
                     }
                   </Animated.View>
                 </View>
@@ -3485,7 +3765,7 @@ export default class Main extends Component {
                     <Text style={styles.date}>{this.state.today}</Text>
                     <TouchableOpacity
                       onPress={() => {
-                        this.props.navigation.navigate('HomeStack')
+                        this.props.navigation.navigate('HomeStack');
                       }}
                     >
                       <Image
@@ -3496,16 +3776,16 @@ export default class Main extends Component {
                   </View>
                   <Animated.View style={{ opacity: this.state.fade[0], flex: 9 }}>
                     {this.state.version == 'Eng' ?
-                      <Text style={styles.question}>Well done!{'\n'}You have completed today's reflection.</Text>
+                      <Text style={styles.questionEng}>Well done!{'\n'}You have completed today's reflection.</Text>
                       :
-                      <Text style={styles.question}>Well done!{'\n'}오늘의 감정이 기록되었습니다.</Text>
+                      <Text style={styles.questionKor}>Well done!{'\n'}오늘의 감정이 기록되었습니다.</Text>
                     }
                   </Animated.View>
                 </View>
                 <Animated.View style={{ opacity: this.state.fade[0], flex: 3 }}>
                   <TouchableOpacity
                     style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
-                    onPress={() => this.props.navigation.navigate('Home')}
+                    onPress={() => this.setState({ step: this.state.step + 1 })}
                   >
                     <Image
                       style={{ width: '70%', height: '70%', resizeMode: 'contain', }}
@@ -3625,11 +3905,19 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 15,
   },
-  question: {
+  questionEng: {
     flex: 1,
     padding: 10,
     fontSize: 20,
     textAlignVertical: 'center',
+    fontFamily:'HelveticaM',
+  },
+  questionKor: {
+    flex: 1,
+    padding: 10,
+    fontSize: 20,
+    textAlignVertical: 'center',
+    fontFamily:'NotoM',
   },
   wordTop: {
     flex: 1,
@@ -3639,14 +3927,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 10,
     flexDirection: 'row',
-  },
-  prevButton: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    transform: [
-      { rotateY: '180deg' }
-    ]
   },
   nextButton: {
     flex: 1,
@@ -3695,6 +3975,30 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 15,
     color:'#FFF',
+  },
+  wordTextEng: {
+    textAlign: 'center',
+    fontSize: 15,
+    color:'#000',
+    fontFamily:'HelveticaR',
+  },
+  wordTextSelectedEng: {
+    textAlign: 'center',
+    fontSize: 15,
+    color:'#FFF',
+    fontFamily:'HelveticaR',
+  },
+  wordTextKor: {
+    textAlign: 'center',
+    fontSize: 15,
+    color:'#000',
+    fontFamily:'NotoR',
+  },
+  wordTextSelectedKor: {
+    textAlign: 'center',
+    fontSize: 15,
+    color:'#FFF',
+    fontFamily:'NotoR',
   },
   wordCenterLong: {
     width: Dimensions.get('window').width * 0.25 - 10,
@@ -3949,7 +4253,6 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   exerciseScroll: {
-
   },
   exerciseBox: {
     width: Dimensions.get('window').width * 0.7,
@@ -3968,6 +4271,15 @@ const styles = StyleSheet.create({
 
     elevation: 5,
   },
+  exerciseEmptyBox: {
+    width: Dimensions.get('window').width - 40,
+    margin: 10,
+    padding: 20,
+    borderRadius: 30,
+
+    backgroundColor: "#FFF",
+    
+  },
   exerciseImage: {
     padding: 10,
     marginTop: Dimensions.get('window').width * 0.04,
@@ -3981,6 +4293,12 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 20,
     marginTop: Dimensions.get('window').height * 0.17,
+    textAlign: 'left',
+    textAlignVertical: 'top',
+  },
+  exerciseEmptyInput: {
+    flex: 1,
+    fontSize: 20,
     textAlign: 'left',
     textAlignVertical: 'top',
   },
