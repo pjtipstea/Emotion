@@ -23,17 +23,6 @@ i18n.translations = {
 i18n.locale = Localization.locale;
 i18n.fallbacks = true;
 
-async function loadFont() {
-  await Font.loadAsync({
-    'Visby': require('./assets/fonts/VisbyRoundCF-Bold.otf'),
-    'HelveticaM': require('./assets/fonts/HelveticaNeueMedium.ttf'),
-    'HelveticaR': require('./assets/fonts/HelveticaNeue.ttf'),
-    'Jua': require('./assets/fonts/Jua-Regular.ttf'),
-    'NotoR': require('./assets/fonts/NotoSansKR-Regular.otf'),
-    'NotoM': require('./assets/fonts/NotoSansKR-Medium.otf'),
-  });
-}
-
 export default function App() {
 
   global.language = i18n.t('language');
@@ -42,8 +31,8 @@ export default function App() {
 
   const [loaded] = useFonts({
     'Visby': require('./assets/fonts/VisbyRoundCF-Bold.otf'),
-    'HelveticaM': require('./assets/fonts/HelveticaNeueMedium.ttf'),
-    'HelveticaR': require('./assets/fonts/HelveticaNeue.ttf'),
+    'HelveticaM': require('./assets/fonts/HelveticaNeue-Medium.otf'),
+    'HelveticaR': require('./assets/fonts/HelveticaNeue-Roman.otf'),
     'Jua': require('./assets/fonts/Jua-Regular.ttf'),
     'NotoR': require('./assets/fonts/NotoSansKR-Regular.otf'),
     'NotoM': require('./assets/fonts/NotoSansKR-Medium.otf'),

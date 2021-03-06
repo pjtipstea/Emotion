@@ -121,13 +121,13 @@ export default class SettingScreen extends Component {
       <ScrollView style={styles.container}>
         <LinearGradient
           // Background Linear Gradient
-          colors={['rgba(24, 0, 169, 0.15)', 'rgba(111, 230, 255, 0.15)', 'rgba(218, 218, 218, 0.15)',]}
+          colors={['rgba(24, 0, 169, 0.05)', 'rgba(111, 230, 255, 0.05)', 'rgba(218, 218, 218, 0.05)',]}
           style={styles.background}
         >
           <View
             style={styles.header}
           >
-            <Text style={styles.headerTitle}>Account Setting</Text>
+            <Text style={styles.headerTitle}>Account Settings</Text>
           </View>
           <View style={styles.box} >
             <View style={[styles.boxHeader, { flexDirection: 'row' }]}>
@@ -247,10 +247,11 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   header: {
-    height: Dimensions.get('window').height * 0.1,
+    height: Dimensions.get('window').height * 0.12,
     flexDirection: 'row',
-    padding: 15,
-    paddingTop: 20,
+    padding: 10,
+    paddingTop: 15,
+    paddingBottom: 0, 
     alignItems: 'center',
   },
   headerTitle: {
@@ -288,7 +289,8 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'left',
     textAlignVertical: 'center',
-    fontSize: 15,
+    marginVertical: 5,
+    fontSize: 17,
     color: '#000',
     fontFamily:'HelveticaM',
   },
@@ -296,24 +298,29 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'right',
     textAlignVertical: 'center',
-    fontSize: 15,
+    marginVertical: 5,
+    fontSize: 17,
     color: '#999',
     fontFamily:'HelveticaM',
   },
   headerTextKor: {
+    includeFontPadding:false,
     flex: 1,
     textAlign: 'left',
     textAlignVertical: 'center',
-    fontSize: 15,
+    marginVertical: 3,
+    fontSize: 16,
     color: '#000',
-    fontFamily:'NotoR',
+    fontFamily:'NotoM',
   },
   headerTextReverseKor: {
+    includeFontPadding:false,
     flex: 1,
     textAlign: 'right',
     textAlignVertical: 'center',
-    fontSize: 15,
+    marginVertical: 3,
+    fontSize: 16,
     color: '#999',
-    fontFamily:'NotoR',
+    fontFamily:'NotoM',
   },
 });

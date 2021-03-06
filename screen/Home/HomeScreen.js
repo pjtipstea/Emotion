@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, Dimensions } from 'react-native';
+import { StatusBar } from 'expo-status-bar'
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import * as Font from 'expo-font'
@@ -23,7 +24,7 @@ export default class HomeScreen extends Component {
       ]
     } else {
       return [
-        "Daily reflection",
+        "How are you feeling today?",
         "Begin today's reflection",
       ]
     }
@@ -43,7 +44,7 @@ export default class HomeScreen extends Component {
       <View style={styles.container}>
         <LinearGradient
           // Background Linear Gradient
-          colors={['rgba(24, 0, 169, 0.15)', 'rgba(111, 230, 255, 0.15)', 'rgba(218, 218, 218, 0.15)',]}
+          colors={['rgba(24, 0, 169, 0.05)', 'rgba(111, 230, 255, 0.05)', 'rgba(218, 218, 218, 0.05)',]}
           style={styles.background}
         >
           <View
@@ -56,15 +57,18 @@ export default class HomeScreen extends Component {
               <Ionicons
                 name='md-person'
                 size={30}
-                style={{ marginBottom: -3, }}
+                style={{ marginBottom: 5, }}
                 color={'#000'}
               />
             </TouchableOpacity>
+            <StatusBar style = "auto" />
           </View>
           <Text style={styles.subTitle}>Today</Text>
           <LinearGradient
             // Background Linear Gradient
-            colors={['rgba(3,106,215,1)', 'rgba(58,155,255,1)', 'rgba(164,239,255,1)',]}
+            colors={['rgba(3,106,215,1)', 'rgba(58,155,255,1)', 'rgba(120,134,255,1)',]}
+            start={[0.0, 0.0]}
+            end={[0.8, 1.0]}
             style={styles.box}
           >
             <View style={styles.boxHeader}>
@@ -118,10 +122,11 @@ const styles = StyleSheet.create({
     fontFamily:'Visby',
   },
   headerTitleKor: {
+    includeFontPadding:false,
     width: Dimensions.get('window').width - 70,
     fontSize: 36,
     fontWeight: 'bold',
-    fontFamily:'Jua',
+    fontFamily:'Visby',
   },
   rightIconContainer: {
     flex: 1,
@@ -129,15 +134,15 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     marginHorizontal: 10,
-    marginVertical: 25,
+    marginVertical: 20,
     fontSize: 24,
     fontFamily:'HelveticaM',
   },
   box: {
     height: Dimensions.get('window').height * 0.2,
     borderRadius: 20,
-    marginTop: 5,
-    marginBottom: 5,
+    marginTop: 0,
+    marginBottom: 10,
     marginRight: 10,
     marginLeft: 10,
     padding: 20,
@@ -157,7 +162,7 @@ const styles = StyleSheet.create({
     fontFamily:'HelveticaM',
   },
   boxContent: {
-    flex: 7,
+    flex: 10,
     borderColor: '#FFF',
     justifyContent: 'center',
     alignItems: 'center',
@@ -166,19 +171,22 @@ const styles = StyleSheet.create({
     width: '90%',
     borderRadius: 50,
     backgroundColor: '#FFF',
-    marginTop: 10,
-    paddingVertical: 15,
+    marginTop:10,
+    paddingVertical: 20,
   },
   buttonTextEng: {
     color: 'rgb(1, 87, 172)',
     textAlign: 'center',
     textAlignVertical: 'center',
     fontSize: 18,
+    fontFamily:'HelveticaM',
   },
   buttonTextKor: {
+    includeFontPadding:false,
     color: 'rgb(1, 87, 172)',
     textAlign: 'center',
     textAlignVertical: 'center',
     fontSize: 18,
+    fontFamily:'NotoM',
   },
 });

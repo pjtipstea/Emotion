@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions, Image, ImageBackground, Linking } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions, Image, ImageBackground, Linking, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as GoogleSignIn from 'expo-google-sign-in';
 
@@ -206,11 +206,10 @@ export default class Login extends Component {
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
-                global.mail = "hnsamuel1226@gmail.com"
-                this.props.navigation.navigate('Menu')
+                //global.mail = "hnsamuel1226@gmail.com"
+                //this.props.navigation.navigate('Menu')
 
-
-                //this.signInAsync();
+                this.signInAsync();
               }}
             >
               <ImageBackground

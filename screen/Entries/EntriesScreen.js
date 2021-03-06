@@ -58,7 +58,7 @@ export default class EntriesScreen extends Component {
       <View style={styles.container}>
         <LinearGradient
           // Background Linear Gradient
-          colors={['rgba(24, 0, 169, 0.15)', 'rgba(111, 230, 255, 0.15)', 'rgba(218, 218, 218, 0.15)',]}
+          colors={['rgba(24, 0, 169, 0.05)', 'rgba(111, 230, 255, 0.05)', 'rgba(218, 218, 218, 0.05)',]}
           style={styles.background}
         >
           <View
@@ -71,7 +71,7 @@ export default class EntriesScreen extends Component {
               <Ionicons
                 name='md-person'
                 size={30}
-                style={{ marginBottom: -3, }}
+                style={{ marginBottom: 5, }}
                 color={'#000'}
               />
             </TouchableOpacity>
@@ -144,12 +144,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
+  blankSpace: {
+    flex: 1,
+  },
   background: {
     flex: 1,
     padding: 10,
-  },
-  blankSpace: {
-    flex: 1,
   },
   header: {
     height: Dimensions.get('window').height * 0.12,
@@ -165,10 +165,11 @@ const styles = StyleSheet.create({
     fontFamily:'Visby',
   },
   headerTitleKor: {
+    includeFontPadding:false,
     width: Dimensions.get('window').width - 70,
     fontSize: 36,
     fontWeight: 'bold',
-    fontFamily:'Jua',
+    fontFamily:'Visby',
   },
   rightIconContainer: {
     flex: 1,
@@ -176,15 +177,15 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     marginHorizontal: 10,
-    marginVertical: 25,
+    marginVertical: 20,
     fontSize: 24,
     fontFamily:'HelveticaM',
   },
   box: {
-    flex: 5,
+    height: Dimensions.get('window').height * 0.35,
     backgroundColor:"#FFF",
     borderRadius: 20,
-    marginTop: 5,
+    marginTop: 0,
     marginBottom: 5,
     marginRight: 10,
     marginLeft: 10,
@@ -216,7 +217,9 @@ const styles = StyleSheet.create({
     width: '90%',
     borderRadius: 50,
     backgroundColor: '#ADC6D1',
-    marginVertical: 7,
+    marginTop: 10,
+    marginVertical: 5,
+    paddingVertical: 10,
   },
   buttonTextEng: {
     color: '#FFF',
@@ -226,6 +229,7 @@ const styles = StyleSheet.create({
     fontFamily:'HelveticaM',
   },
   buttonTextKor: {
+    includeFontPadding:false,
     color: '#FFF',
     textAlign: 'center',
     textAlignVertical: 'center',

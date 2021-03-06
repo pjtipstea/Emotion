@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
-import { AntDesign, SimpleLineIcons, Entypo, MaterialCommunityIcons, Image } from '@expo/vector-icons';
+import { StyleSheet, Platform } from 'react-native';
+import { AntDesign, SimpleLineIcons, Entypo, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
@@ -16,10 +16,24 @@ export default function BottomTabNavigator({ navigation, route }) {
   return (
     <BottomTab.Navigator
       initialRouteName={INITIAL_ROUTE_NAME}
-      tabBarOptions={{
+      tabBarOptions={Platform.OS == 'android' ?
+        {
         activeTintColor: 'black',
         inactiveTintColor: '#999',
-      }}
+        style: {height: 70},
+        tabStyle: {height: 70, paddingVertical: 15},
+        labelStyle: {fontSize: 13, margin: 0, padding: 0, fontFamily:'Visby'},
+        showLabel: true,
+        }
+      :
+        {
+          activeTintColor: 'black',
+          inactiveTintColor: '#999',
+          style: {height: 110},
+          tabStyle: {height: 85, paddingVertical: 15},
+          labelStyle: {fontSize: 13, margin: 0, padding: 0, fontFamily:'Visby'},
+          showLabel: true,
+        }}
     >
       <BottomTab.Screen
         name="HomeStack"
@@ -27,7 +41,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         initialParams={{ set: true }}
         options={{
           title: 'Home',
-          tabBarIcon: ({ focused }) => focused ? <AntDesign name="home" size={24} color="black" /> : <AntDesign name="home" size={24} color="#999" />,
+          tabBarIcon: ({ focused }) => focused ? <Feather name="home" size={22} color="black" /> : <Feather name="home" size={22} color="#999" />,
         }}
         listeners={({navigation}) => ({
           tabPress: (event) => {
@@ -42,7 +56,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         initialParams={{ set: true }}
         options={{
           title: 'Insights',
-          tabBarIcon: ({ focused }) => focused ? <SimpleLineIcons name="graph" size={24} color="black" /> : <SimpleLineIcons name="graph" size={24} color="#999" />
+          tabBarIcon: ({ focused }) => focused ? <MaterialCommunityIcons name="lightbulb-outline" size={24} color="black" /> : <MaterialCommunityIcons name="lightbulb-outline" size={24} color="#999" />
         }}
         listeners={({navigation}) => ({
           tabPress: (event) => {
@@ -57,7 +71,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         initialParams={{ set: true }}
         options={{
           title: 'Monitor',
-          tabBarIcon: ({ focused }) => focused ? <Entypo name="compass" size={24} color="black" /> : <Entypo name="compass" size={24} color="#999" />
+          tabBarIcon: ({ focused }) => focused ? <Feather name="activity" size={22} color="black" /> : <Feather name="activity" size={22} color="#999" />
         }}
         listeners={({navigation}) => ({
           tabPress: (event) => {
@@ -72,7 +86,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         initialParams={{ set: true }}
         options={{
           title: 'Entries',
-          tabBarIcon: ({ focused }) => focused ? <MaterialCommunityIcons name="calendar-month" size={24} color="black" /> : <MaterialCommunityIcons name="calendar-month" size={24} color="#999" />
+          tabBarIcon: ({ focused }) => focused ? <Feather name="calendar" size={22} color="black" /> : <Feather name="calendar" size={22} color="#999" />
         }}
         listeners={({navigation}) => ({
           tabPress: (event) => {
