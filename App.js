@@ -7,7 +7,7 @@ import * as Font from 'expo-font';
 import { useFonts } from 'expo-font';
 import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
-
+// hello 
 import Login from './screen/Login/Login';
 import SignUp from './screen/Login/SignUp';
 import Main from './screen/Login/Main';
